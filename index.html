@@ -21,6 +21,7 @@ header{display:flex;justify-content:space-between;align-items:center;padding:22p
 .brand b{color:var(--ice)}
 .badges{display:flex;gap:8px;font-size:12px}
 .badge{padding:5px 10px;border:1px solid var(--line);border-radius:99px;background:var(--glass);color:var(--dim);display:flex;align-items:center;gap:6px}
+.langs{display:flex;border:1px solid var(--line);border-radius:99px;overflow:hidden}.langs button{background:none;border:0;color:var(--dim);font:600 11px Inter;padding:5px 9px;cursor:pointer}.langs button.on{background:var(--ink);color:var(--bg)}
 .badge i{width:7px;height:7px;border-radius:50%;background:#555}
 .badge.live i{background:#3ef0a0;box-shadow:0 0 10px #3ef0a0}
 .badge.snap i{background:var(--warm)}
@@ -132,7 +133,8 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border-radius:50%;bac
 .hhinp{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--dim);margin-top:14px;flex-wrap:wrap}
 .hhinp input{width:100px;font:14px Inter;border:1px solid var(--line);background:#0e1528;color:var(--ink);border-radius:9px;padding:6px 8px}
 @media(max-width:860px){.act{grid-template-columns:1fr}}
-@media(max-width:600px){.prices{height:110px}.rec strong{font-size:16px}.todo li{grid-template-columns:28px 1fr;padding:14px}.todo li strong{grid-column:2}.days{font-size:12px}}
+@media(max-width:600px){
+ header{flex-wrap:wrap}.badges{flex-wrap:wrap;justify-content:flex-end}.prices{height:110px}.rec strong{font-size:16px}.todo li{grid-template-columns:28px 1fr;padding:14px}.todo li strong{grid-column:2}.days{font-size:12px}}
 footer{color:var(--dim);font-size:13px;margin-top:90px;border-top:1px solid var(--line);padding-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
 footer a{color:var(--ice)}
 .reveal{opacity:0;transform:translateY(30px);transition:1s cubic-bezier(.2,.8,.2,1)}
@@ -166,69 +168,69 @@ footer a{color:var(--ice)}
 <canvas id="sky"></canvas><div class="aurora"></div>
 <main>
 <header><div class="brand">Kulde<b>måleren</b></div>
-<div class="badges"><span class="badge" id="bPr"><i></i>Pris</span><span class="badge" id="bMet"><i></i>MET</span><span class="badge" id="bEl"><i></i>Elhub</span></div></header>
+<div class="badges"><span class="langs" id="langs"><button data-l="nb">BM</button><button data-l="nn">NN</button><button data-l="en">EN</button></span><span class="badge" id="bPr"><i></i>Pris</span><span class="badge" id="bMet"><i></i>MET</span><span class="badge" id="bEl"><i></i>Elhub</span></div></header>
 
 <div class="hero">
  <div>
-  <div class="kicker" id="heroKick">Prognose · hele Norge</div>
-  <h1>Når det blir <em id="cold">kaldt</em>, skrur Norge opp varmen.</h1>
-  <p class="lede">Vi kobler målt strømforbruk fra <b>Elhub</b> med værvarselet fra <b>Meteorologisk institutt</b> og dagens strømpriser, og anslår hvor mye strøm landet bruker de neste dagene. Du får også konkrete tips til når du bør bruke strøm. Trykk på et område på kartet.</p>
+  <div class="kicker" id="heroKick" data-i="kick">Prognose · hele Norge</div>
+  <h1 data-i="h1">Når det blir <em id="cold">kaldt</em>, skrur Norge opp varmen.</h1>
+  <p class="lede" data-i="lede">Vi kobler målt strømforbruk fra <b>Elhub</b> med værvarselet fra <b>Meteorologisk institutt</b> og dagens strømpriser, og anslår hvor mye strøm landet bruker de neste dagene. Du får også konkrete tips til når du bør bruke strøm. Trykk på et område på kartet.</p>
   <div class="big">
-   <div><small>Neste 24 t</small><strong id="k24">–</strong><span id="k24s">GWh</span></div>
-   <div><small>mot samme døgn sist uke</small><strong id="kd">–</strong><span>endring</span></div>
-   <div><small>Temperatur nå</small><strong id="kt">–</strong><span id="ktw"></span></div>
+   <div><small data-i="n24">Neste 24 t</small><strong id="k24">–</strong><span id="k24s">GWh</span></div>
+   <div><small data-i="vsweek">mot samme døgn sist uke</small><strong id="kd">–</strong><span data-i="chg">endring</span></div>
+   <div><small data-i="tnow">Temperatur nå</small><strong id="kt">–</strong><span id="ktw"></span></div>
   </div>
  </div>
  <div class="mapwrap"><svg id="map"></svg></div>
 </div>
 
 <section id="todo" class="reveal">
- <div class="kicker" id="actKick">For deg</div>
- <h2 id="actTitle">Hva du kan gjøre de neste dagene</h2>
+ <div class="kicker" id="actKick" data-i="forYou">For deg</div>
+ <h2 id="actTitle" data-i="actT">Hva du kan gjøre de neste dagene</h2>
  <p class="sub" id="actSub"></p>
  <div class="act">
   <div class="panel">
-   <h3 class="h3">Strømpris time for time</h3>
+   <h3 class="h3" data-i="priceT">Strømpris time for time</h3>
    <div class="prices" id="prices"></div>
    <div class="paxis" id="paxis"></div>
    <div class="rec">
-    <div><small>Billigste 3 timer</small><strong id="lo">–</strong><small id="loP"></small></div>
-    <div><small>Dyreste 3 timer</small><strong id="hi">–</strong><small id="hiP"></small></div>
+    <div><small data-i="lo3">Billigste 3 timer</small><strong id="lo">–</strong><small id="loP"></small></div>
+    <div><small data-i="hi3">Dyreste 3 timer</small><strong id="hi">–</strong><small id="hiP"></small></div>
    </div>
   </div>
   <div class="panel">
-   <h3 class="h3">Kalde dager framover</h3>
+   <h3 class="h3" data-i="coldT">Kalde dager framover</h3>
    <table class="days" id="days"></table>
-   <div class="hhinp"><label for="kwh">Ditt årsforbruk</label><input type="number" id="kwh" value="16000" step="1000" min="1000"> kWh</div>
+   <div class="hhinp"><label for="kwh" data-i="yearly">Ditt årsforbruk</label><input type="number" id="kwh" value="16000" step="1000" min="1000"> kWh</div>
   </div>
  </div>
  <ol class="todo" id="todoList"></ol>
 </section>
 
 <section class="reveal">
- <div class="kicker">Kurven</div>
- <h2 id="chTitle">Én uke målt, ni dager varslet.</h2>
- <p class="sub">Den lyse linjen er faktisk forbruk time for time. Den stiplede er anslaget vårt, beregnet fra vanlig ukemønster og justert for temperaturen i varselet. Den blå linjen er temperaturen, snudd slik at kaldere er høyere opp. Da ser du hvordan forbruket følger kulda.</p>
+ <div class="kicker" data-i="kCurve">Kurven</div>
+ <h2 id="chTitle" data-i="chT">Én uke målt, ni dager varslet.</h2>
+ <p class="sub" data-i="chSub">Den lyse linjen er faktisk forbruk time for time. Den stiplede er anslaget vårt, beregnet fra vanlig ukemønster og justert for temperaturen i varselet. Den blå linjen er temperaturen, snudd slik at kaldere er høyere opp. Da ser du hvordan forbruket følger kulda.</p>
  <div class="panel">
   <div class="tabs" id="tabs"></div>
   <div class="tabs sm" id="cgTabs"></div>
   <svg id="chart"></svg>
-  <div class="legend"><span style="--c:#e8eefc">Målt (Elhub)</span><span style="--c:#ffb36b">Prognose</span><span style="--c:#7fd8ff">Temperatur (MET, kaldest øverst)</span></div>
+  <div class="legend"><span style="--c:#e8eefc" data-i="lgM">Målt (Elhub)</span><span style="--c:#ffb36b" data-i="lgF">Prognose</span><span style="--c:#7fd8ff" data-i="lgT">Temperatur (MET, kaldest øverst)</span></div>
  </div>
 </section>
 
 <section class="reveal">
- <div class="kicker">Hva om?</div>
- <h2>Dra i termometeret. Se hva skjer med strømmen.</h2>
+ <div class="kicker" data-i="kWhat">Hva om?</div>
+ <h2 data-i="whatT">Dra i termometeret. Se hva skjer med strømmen.</h2>
  <div class="panel whatif">
   <div>
    <div class="deg"><span id="dv">0</span><sup>°C</sup></div>
-   <p style="text-align:center;color:var(--dim);margin-bottom:20px">endring fra varselet, gjennom neste uke</p>
+   <p style="text-align:center;color:var(--dim);margin-bottom:20px" data-i="whatSub">endring fra varselet, gjennom neste uke</p>
    <input type="range" id="slider" min="-15" max="10" step="1" value="0">
   </div>
   <div>
    <div class="card" style="background:none;border:0;padding:0">
-    <small>Ekstra forbruk neste 7 dager</small>
+    <small data-i="extra7">Ekstra forbruk neste 7 dager</small>
     <strong id="wiG">0 GWh</strong>
     <p id="wiP">Flytt glidebryteren.</p>
     <div class="equiv" id="equiv"></div>
@@ -238,30 +240,30 @@ footer a{color:var(--ice)}
 </section>
 
 <section class="reveal">
- <div class="kicker">Hvem bruker strømmen?</div>
- <h2>Hvem merker kulda best på strømmen?</h2>
- <p class="sub">Strømmen går til fem typer kunder. Noen bruker den mest til oppvarming og merker kulda med en gang. Andre, som fabrikker, bruker omtrent like mye uansett vær.</p>
+ <div class="kicker" data-i="kWho">Hvem bruker strømmen?</div>
+ <h2 data-i="whoT">Hvem merker kulda best på strømmen?</h2>
+ <p class="sub" data-i="whoSub">Strømmen går til fem typer kunder. Noen bruker den mest til oppvarming og merker kulda med en gang. Andre, som fabrikker, bruker omtrent like mye uansett vær.</p>
 
  <div class="panel">
-  <div class="kicker" style="color:var(--dim)">1 · Gjett først</div>
-  <h3 class="h3">Hvem bruker mest strøm i Norge i en vanlig uke?</h3>
+  <div class="kicker" style="color:var(--dim)" data-i="q1">1 · Gjett først</div>
+  <h3 class="h3" data-i="q1T">Hvem bruker mest strøm i Norge i en vanlig uke?</h3>
   <div class="quiz" id="quiz"></div>
   <p class="qa" id="qa"></p>
  </div>
 
  <div class="panel">
-  <div class="kicker" style="color:var(--dim)">2 · Skru ned temperaturen</div>
-  <h3 class="h3">Dra termometeret og se hvem som reagerer.</h3>
+  <div class="kicker" style="color:var(--dim)" data-i="q2">2 · Skru ned temperaturen</div>
+  <h3 class="h3" data-i="q2T">Dra termometeret og se hvem som reagerer.</h3>
   <div class="thermo">
-   <div class="tcol"><div class="tval"><span id="gT">0</span>°C</div><input type="range" id="gSlide" min="-20" max="10" value="0"><small>avvik fra normalen</small><div class="presets" id="gPre"></div></div>
+   <div class="tcol"><div class="tval"><span id="gT">0</span>°C</div><input type="range" id="gSlide" min="-20" max="10" value="0"><small data-i="dev">avvik fra normalen</small><div class="presets" id="gPre"></div></div>
    <div class="bars" id="bars"></div>
   </div>
   <p class="qa" id="gNote"></p>
  </div>
 
  <div class="panel">
-  <div class="kicker" style="color:var(--dim)">3 · Ukerytmen</div>
-  <h3 class="h3">Hver kundetype har sin egen ukerytme. Velg en.</h3>
+  <div class="kicker" style="color:var(--dim)" data-i="q3">3 · Ukerytmen</div>
+  <h3 class="h3" data-i="q3T">Hver kundetype har sin egen ukerytme. Velg en.</h3>
   <div class="tabs" id="gTabs"></div>
   <div class="heat" id="heat"></div>
   <p class="qa" id="heatNote"></p>
@@ -270,8 +272,8 @@ footer a{color:var(--ice)}
 </section>
 
 <footer>
- <div><b style="color:var(--ink)">Data</b><br>Forbruk: <a href="https://api.elhub.no">api.elhub.no</a>, datasett <code>CONSUMPTION_PER_GROUP_MBA_HOUR</code>. Måledata publiseres med omtrent to døgns forsinkelse.<br>Vær: <a href="https://api.met.no">api.met.no</a> Locationforecast 2.0, data fra MET Norge (CC BY 4.0).<br>Pris: <a href="https://www.hvakosterstrommen.no">hvakosterstrommen.no</a>, spotpris uten mva., nettleie og påslag.<br><span id="srcNote"></span></div>
- <div><b style="color:var(--ink)">Slik er det regnet ut</b><br>Utgangspunktet er snittforbruket for hver ukedag og time de siste fire ukene. Det justeres med en fast prosent per grad avvik fra normaltemperaturen i området: husholdning 3 %, hytte 4 %, tjenesteyting 1,5 %, industri 0,3 % og primærnæring 1 %. Sparetipsene regner med at om lag 60 % av en husstands strøm går til oppvarming, og at én grad lavere innetemperatur gir rundt 5 % mindre energi til oppvarming. Dette er en forenklet prototype og ikke en offisiell prognose.</div>
+ <div data-i="fData"><b style="color:var(--ink)">Data</b><br>Forbruk: <a href="https://api.elhub.no">api.elhub.no</a>, datasett <code>CONSUMPTION_PER_GROUP_MBA_HOUR</code>. Måledata publiseres med omtrent to døgns forsinkelse.<br>Vær: <a href="https://api.met.no">api.met.no</a> Locationforecast 2.0, data fra MET Norge (CC BY 4.0).<br>Pris: <a href="https://www.hvakosterstrommen.no">hvakosterstrommen.no</a>, spotpris uten mva., nettleie og påslag.<br><span id="srcNote"></span></div>
+ <div data-i="fMeth"><b style="color:var(--ink)">Slik er det regnet ut</b><br>Utgangspunktet er snittforbruket for hver ukedag og time de siste fire ukene. Det justeres med en fast prosent per grad avvik fra normaltemperaturen i området: husholdning 3 %, hytte 4 %, tjenesteyting 1,5 %, industri 0,3 % og primærnæring 1 %. Sparetipsene regner med at om lag 60 % av en husstands strøm går til oppvarming, og at én grad lavere innetemperatur gir rundt 5 % mindre energi til oppvarming. Dette er en forenklet prototype og ikke en offisiell prognose.</div>
 </footer>
 </main>
 <div class="tip" id="tip"></div>
@@ -282,7 +284,16 @@ const SNAP_MET = {"NO1":[["2026-11-19T11:00:00Z",0.9,1.8,82.0,"partlycloudy_day"
 const AREAS={NO1:{n:"Øst",c:"Oslo",lat:59.91,lon:10.75,norm:4},NO2:{n:"Sør",c:"Kristiansand",lat:58.15,lon:8.0,norm:6},NO3:{n:"Midt",c:"Trondheim",lat:63.43,lon:10.39,norm:3},NO4:{n:"Nord",c:"Tromsø",lat:69.65,lon:18.96,norm:0},NO5:{n:"Vest",c:"Bergen",lat:60.39,lon:5.32,norm:6.5}};
 const GROUPS={household:["Husholdning",.03,"#ff8a5b"],cabin:["Hytter",.04,"#ffd36b"],tertiary:["Tjenesteyting",.015,"#7fd8ff"],secondary:["Industri",.003,"#a78bfa"],primary:["Primærnæring",.01,"#3ef0a0"]};
 const $=s=>document.querySelector(s), H=3600e3;
-const fmt=(v,d=1)=>v.toLocaleString("no-NO",{maximumFractionDigits:d,minimumFractionDigits:d});
+let LANG=(new URLSearchParams(location.search).get("lang")||localStorage.getItem("lang")||(navigator.language||"").slice(0,2)).replace(/^no|^nb/,"nb");if(!["nb","nn","en"].includes(LANG))LANG="nb";
+const L=(nb,nn,en)=>({nb,nn,en})[LANG];
+const LOC=()=>({nb:"nb-NO",nn:"nn-NO",en:"en-GB"})[LANG];
+const STATIC={"kick": ["Prognose · hele Norge", "Prognose · heile Noreg", "Forecast · all of Norway"], "h1": ["Når det blir <em id=\"cold\">kaldt</em>, skrur Norge opp varmen.", "Når det blir <em id=\"cold\">kaldt</em>, skrur Noreg opp varmen.", "When it gets <em id=\"cold\">cold</em>, Norway turns up the heat."], "lede": ["Vi kobler målt strømforbruk fra <b>Elhub</b> med værvarselet fra <b>Meteorologisk institutt</b> og dagens strømpriser, og anslår hvor mye strøm landet bruker de neste dagene. Du får også konkrete tips til når du bør bruke strøm. Trykk på et område på kartet.", "Vi koplar målt straumforbruk frå <b>Elhub</b> med vêrvarselet frå <b>Meteorologisk institutt</b> og dagens straumprisar, og anslår kor mykje straum landet brukar dei neste dagane. Du får òg konkrete tips om når du bør bruke straum. Trykk på eit område på kartet.", "We combine measured electricity consumption from <b>Elhub</b> with the weather forecast from the <b>Norwegian Meteorological Institute</b> and today's power prices, and estimate how much electricity Norway will use over the next few days. You also get concrete tips on when to use power. Tap an area on the map."], "n24": ["Neste 24 t", "Neste 24 t", "Next 24 h"], "vsweek": ["mot samme døgn sist uke", "mot same døgn førre veke", "vs. same day last week"], "chg": ["endring", "endring", "change"], "tnow": ["Temperatur nå", "Temperatur no", "Temperature now"], "forYou": ["For deg", "For deg", "For you"], "actT": ["Hva du kan gjøre de neste dagene", "Kva du kan gjere dei neste dagane", "What you can do in the next few days"], "priceT": ["Strømpris time for time", "Straumpris time for time", "Electricity price hour by hour"], "lo3": ["Billigste 3 timer", "Billegaste 3 timar", "Cheapest 3 hours"], "hi3": ["Dyreste 3 timer", "Dyraste 3 timar", "Most expensive 3 hours"], "coldT": ["Kalde dager framover", "Kalde dagar framover", "Cold days ahead"], "yearly": ["Ditt årsforbruk", "Årsforbruket ditt", "Your yearly consumption"], "kCurve": ["Kurven", "Kurva", "The curve"], "chT": ["Én uke målt, ni dager varslet.", "Éi veke målt, ni dagar varsla.", "One week measured, nine days forecast."], "chSub": ["Den lyse linjen er faktisk forbruk time for time. Den stiplede er anslaget vårt, beregnet fra vanlig ukemønster og justert for temperaturen i varselet. Den blå linjen er temperaturen, snudd slik at kaldere er høyere opp. Da ser du hvordan forbruket følger kulda.", "Den lyse linja er faktisk forbruk time for time. Den stipla er anslaget vårt, rekna ut frå vanleg vekemønster og justert for temperaturen i varselet. Den blå linja er temperaturen, snudd slik at kaldare er høgare opp. Då ser du korleis forbruket følgjer kulda.", "The light line is actual consumption hour by hour. The dashed line is our estimate, based on the usual weekly pattern and adjusted for the forecast temperature. The blue line is temperature, flipped so colder is higher up. That way you can see consumption follow the cold."], "lgM": ["Målt (Elhub)", "Målt (Elhub)", "Measured (Elhub)"], "lgF": ["Prognose", "Prognose", "Forecast"], "lgT": ["Temperatur (MET, kaldest øverst)", "Temperatur (MET, kaldast øvst)", "Temperature (MET, coldest at top)"], "kWhat": ["Hva om?", "Kva om?", "What if?"], "whatT": ["Dra i termometeret. Se hva skjer med strømmen.", "Dra i termometeret. Sjå kva som skjer med straumen.", "Drag the thermometer. See what happens to power use."], "whatSub": ["endring fra varselet, gjennom neste uke", "endring frå varselet, gjennom neste veke", "change from the forecast, over the next week"], "extra7": ["Ekstra forbruk neste 7 dager", "Ekstra forbruk neste 7 dagar", "Extra consumption next 7 days"], "kWho": ["Hvem bruker strømmen?", "Kven brukar straumen?", "Who uses the power?"], "whoT": ["Hvem merker kulda best på strømmen?", "Kven merkar kulda best på straumen?", "Who feels the cold most on their power use?"], "whoSub": ["Strømmen går til fem typer kunder. Noen bruker den mest til oppvarming og merker kulda med en gang. Andre, som fabrikker, bruker omtrent like mye uansett vær.", "Straumen går til fem typar kundar. Nokre brukar han mest til oppvarming og merkar kulda med ein gong. Andre, som fabrikkar, brukar omtrent like mykje same kva vêret er.", "Electricity goes to five types of customers. Some use it mostly for heating and feel the cold right away. Others, like factories, use about the same regardless of weather."], "q1": ["1 · Gjett først", "1 · Gjett først", "1 · Guess first"], "q1T": ["Hvem bruker mest strøm i Norge i en vanlig uke?", "Kven brukar mest straum i Noreg i ei vanleg veke?", "Who uses the most electricity in Norway in a normal week?"], "q2": ["2 · Skru ned temperaturen", "2 · Skru ned temperaturen", "2 · Turn down the temperature"], "q2T": ["Dra termometeret og se hvem som reagerer.", "Dra termometeret og sjå kven som reagerer.", "Drag the thermometer and see who reacts."], "dev": ["avvik fra normalen", "avvik frå normalen", "deviation from normal"], "q3": ["3 · Ukerytmen", "3 · Vekerytmen", "3 · The weekly rhythm"], "q3T": ["Hver kundetype har sin egen ukerytme. Velg en.", "Kvar kundetype har sin eigen vekerytme. Vel ein.", "Each customer type has its own weekly rhythm. Pick one."], "fData": ["<b style=\"color:var(--ink)\">Data</b><br>Forbruk: <a href=\"https://api.elhub.no\">api.elhub.no</a>, datasett <code>CONSUMPTION_PER_GROUP_MBA_HOUR</code>. Måledata publiseres med omtrent to døgns forsinkelse.<br>Vær: <a href=\"https://api.met.no\">api.met.no</a> Locationforecast 2.0, data fra MET Norge (CC BY 4.0).<br>Pris: <a href=\"https://www.hvakosterstrommen.no\">hvakosterstrommen.no</a>, spotpris uten mva., nettleie og påslag.<br><span id=\"srcNote\"></span>", "<b style=\"color:var(--ink)\">Data</b><br>Forbruk: <a href=\"https://api.elhub.no\">api.elhub.no</a>, datasett <code>CONSUMPTION_PER_GROUP_MBA_HOUR</code>. Måledata blir publiserte med om lag to døgns forseinking.<br>Vêr: <a href=\"https://api.met.no\">api.met.no</a> Locationforecast 2.0, data frå MET Noreg (CC BY 4.0).<br>Pris: <a href=\"https://www.hvakosterstrommen.no\">hvakosterstrommen.no</a>, spotpris utan mva., nettleige og påslag.<br><span id=\"srcNote\"></span>", "<b style=\"color:var(--ink)\">Data</b><br>Consumption: <a href=\"https://api.elhub.no\">api.elhub.no</a>, dataset <code>CONSUMPTION_PER_GROUP_MBA_HOUR</code>. Metering data is published with about a two-day delay.<br>Weather: <a href=\"https://api.met.no\">api.met.no</a> Locationforecast 2.0, data from MET Norway (CC BY 4.0).<br>Price: <a href=\"https://www.hvakosterstrommen.no\">hvakosterstrommen.no</a>, spot price excluding VAT, grid tariff and supplier mark-up.<br><span id=\"srcNote\"></span>"], "fMeth": ["<b style=\"color:var(--ink)\">Slik er det regnet ut</b><br>Utgangspunktet er snittforbruket for hver ukedag og time de siste fire ukene. Det justeres med en fast prosent per grad avvik fra normaltemperaturen i området: husholdning 3 %, hytte 4 %, tjenesteyting 1,5 %, industri 0,3 % og primærnæring 1 %. Sparetipsene regner med at om lag 60 % av en husstands strøm går til oppvarming, og at én grad lavere innetemperatur gir rundt 5 % mindre energi til oppvarming. Dette er en forenklet prototype og ikke en offisiell prognose.", "<b style=\"color:var(--ink)\">Slik er det rekna ut</b><br>Utgangspunktet er snittforbruket for kvar vekedag og time dei siste fire vekene. Det blir justert med ein fast prosent per grad avvik frå normaltemperaturen i området: hushald 3 %, hytte 4 %, tenesteyting 1,5 %, industri 0,3 % og primærnæring 1 %. Sparetipsa reknar med at om lag 60 % av straumen til eit hushald går til oppvarming, og at éin grad lågare innetemperatur gir rundt 5 % mindre energi til oppvarming. Dette er ein forenkla prototype og ikkje ein offisiell prognose.", "<b style=\"color:var(--ink)\">How it is calculated</b><br>The starting point is average consumption for each weekday and hour over the last four weeks. It is adjusted by a fixed percentage per degree of deviation from the area's normal temperature: households 3 %, cabins 4 %, services 1.5 %, industry 0.3 % and primary industries 1 %. The saving tips assume about 60 % of a household's electricity goes to heating, and that one degree lower indoor temperature saves around 5 % of heating energy. This is a simplified prototype, not an official forecast."]};
+function applyStatic(){document.documentElement.lang=LANG==="en"?"en":LANG;document.querySelectorAll("[data-i]").forEach(e=>{const s=STATIC[e.dataset.i];if(s)e.innerHTML=s[{nb:0,nn:1,en:2}[LANG]]});
+ document.title=L("Kuldemåleren – hvordan været styrer strømmen i Norge","Kuldemålaren – korleis vêret styrer straumen i Noreg","The Cold Meter – how weather drives electricity use in Norway");
+ $(".brand").innerHTML=L("Kulde<b>måleren</b>","Kulde<b>målaren</b>","Cold<b>meter</b>");
+ const c=$("#cold");for(let i=0;i<5;i++)c.insertAdjacentHTML("beforeend",`<span class="fl" style="left:${10+i*18}%;animation-delay:${i*1.1}s">❄</span>`);
+ document.querySelectorAll("#langs button").forEach(b=>b.classList.toggle("on",b.dataset.l===LANG))}
+const fmt=(v,d=1)=>v.toLocaleString(LOC(),{maximumFractionDigits:d,minimumFractionDigits:d});
 let EL,MET,sel="ALL",shift=0;
 
 async function loadMet(){
@@ -294,8 +305,8 @@ async function loadMet(){
    const j=await r.json();
    out[a]=j.properties.timeseries.map(t=>{const d=t.data.instant.details,n=t.data.next_1_hours||t.data.next_6_hours||{};return[t.time,d.air_temperature,d.wind_speed||0,d.cloud_area_fraction||0,(n.summary||{}).symbol_code||""]});
   }));
-  $("#bMet").classList.add("live");$("#bMet").lastChild.textContent="MET live";return out;
- }catch(e){$("#bMet").classList.add("snap");$("#bMet").lastChild.textContent="MET øyeblikksbilde";return SNAP_MET}
+  $("#bMet").classList.add("live");$("#bMet").lastChild.textContent=L("MET live","MET live","MET live");return out;
+ }catch(e){$("#bMet").classList.add("snap");$("#bMet").lastChild.textContent=L("MET øyeblikksbilde","MET augneblinksbilete","MET snapshot");return SNAP_MET}
 }
 async function loadEl(){
  try{
@@ -305,8 +316,8 @@ async function loadEl(){
   for(const a of j.data)for(const x of a.attributes.consumptionPerGroupMbaHour){const k=x.priceArea+"|"+x.consumptionGroup;(acc[k]??={})[x.startTime]=(acc[k][x.startTime]||0)+x.quantityKwh/1000;ts.add(x.startTime)}
   const times=[...ts].sort((a,b)=>new Date(a)-new Date(b));if(times.length<300)throw 0;
   const series={};for(const k in acc)series[k]=times.map(t=>acc[k][t]||0);
-  $("#bEl").classList.add("live");$("#bEl").lastChild.textContent="Elhub live";return{start:times[0],series};
- }catch(e){$("#bEl").classList.add("snap");$("#bEl").lastChild.textContent="Elhub øyeblikksbilde";$("#srcNote").textContent="Elhub-API-et tillater ikke kall direkte fra nettleseren (CORS), så siden bruker et innebygd øyeblikksbilde av forbruksdata.";return SNAP_EL}
+  $("#bEl").classList.add("live");$("#bEl").lastChild.textContent=L("Elhub live","Elhub live","Elhub live");return{start:times[0],series};
+ }catch(e){$("#bEl").classList.add("snap");$("#bEl").lastChild.textContent=L("Elhub øyeblikksbilde","Elhub augneblinksbilete","Elhub snapshot");return SNAP_EL}
 }
 
 // hourly temperature from MET (interpolate 6h steps)
@@ -352,8 +363,8 @@ function drawMap(){
    <circle class="halo" cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${c}" stroke-width=".05"/>
    <circle cx="${x}" cy="${y}" r="${r*1.4}" fill="url(#ng)" opacity=".55"/>
    <circle class="core" cx="${x}" cy="${y}" r=".16" fill="#fff"/>
-   <text x="${lx}" y="${y-.15}">${a} · ${AREAS[a].n}</text>
-   <text class="t" x="${lx}" y="${y+.55}">${fmt(T,0)}° <tspan style="font:400 .36px Inter;fill:#7f8bab">${fmt(loads[a]/1000,1)} GWh/døgn</tspan></text></g>`}
+   <text x="${lx}" y="${y-.15}">${a} · ${an(a)}</text>
+   <text class="t" x="${lx}" y="${y+.55}">${fmt(T,0)}° <tspan style="font:400 .36px Inter;fill:#7f8bab">${fmt(loads[a]/1000,1)}${L(" GWh/døgn"," GWh/døgn"," GWh/day")}</tspan></text></g>`}
  m.innerHTML=html;
  m.querySelectorAll(".node").forEach(n=>n.onclick=()=>select(sel===n.dataset.a?"ALL":n.dataset.a));
 }
@@ -370,10 +381,10 @@ function drawChart(){
  const line=(a,f,y)=>a.map((p,i)=>(i?"L":"M")+X(p.t).toFixed(1)+","+y(f(p)).toFixed(1)).join("");
  let g=`<defs><linearGradient id="fa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb36b" stop-opacity=".35"/><stop offset="1" stop-color="#ffb36b" stop-opacity="0"/></linearGradient>
  <linearGradient id="aa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8eefc" stop-opacity=".22"/><stop offset="1" stop-color="#e8eefc" stop-opacity="0"/></linearGradient></defs>`;
- for(let d=new Date(tmin);+d<=tmax;d.setDate(d.getDate()+1)){d.setHours(0,0,0,0);const x=X(+d);if(x<pl)continue;const lab=!M||d.getDate()%3===0;g+=`<line x1="${x}" x2="${x}" y1="${pt}" y2="${Hh-pb}" stroke="#141b2c"/>${lab?`<text x="${x+3}" y="${Hh-14}">${d.toLocaleDateString("no-NO",M?{day:"numeric",month:"short"}:{weekday:"short",day:"numeric"})}</text>`:""}`}
+ for(let d=new Date(tmin);+d<=tmax;d.setDate(d.getDate()+1)){d.setHours(0,0,0,0);const x=X(+d);if(x<pl)continue;const lab=!M||d.getDate()%3===0;g+=`<line x1="${x}" x2="${x}" y1="${pt}" y2="${Hh-pb}" stroke="#141b2c"/>${lab?`<text x="${x+3}" y="${Hh-14}">${d.toLocaleDateString(LOC(),M?{day:"numeric",month:"short"}:{weekday:"short",day:"numeric"})}</text>`:""}`}
  for(let i=0;i<=4;i++){const v=vmin+(vmax-vmin)*i/4;g+=`<text x="${pl-8}" y="${Y(v)+4}" text-anchor="end">${fmt(v/1000,1)}</text>`;const T=Tmin+(Tmax-Tmin)*i/4;g+=`<text x="${W-pr+8}" y="${YT(T)+4}" fill="#7fd8ff" style="fill:#7fd8ff">${fmt(T,0)}°</text>`}
- g+=`<text x="${pl-8}" y="12" text-anchor="end">GWh/t</text>`;
- const nx=X(Date.now());g+=`<rect x="${X(act.at(-1).t)}" y="${pt}" width="${nx-X(act.at(-1).t)}" height="${Hh-pt-pb}" fill="#ffffff06"/><line x1="${nx}" x2="${nx}" y1="${pt}" y2="${Hh-pb}" stroke="#fff" stroke-opacity=".5" stroke-dasharray="2 4"/><text x="${nx+5}" y="${pt+12}" style="fill:#fff">nå</text>`;
+ g+=`<text x="${pl-8}" y="12" text-anchor="end">${L("GWh/t","GWh/t","GWh/h")}</text>`;
+ const nx=X(Date.now());g+=`<rect x="${X(act.at(-1).t)}" y="${pt}" width="${nx-X(act.at(-1).t)}" height="${Hh-pt-pb}" fill="#ffffff06"/><line x1="${nx}" x2="${nx}" y1="${pt}" y2="${Hh-pb}" stroke="#fff" stroke-opacity=".5" stroke-dasharray="2 4"/><text x="${nx+5}" y="${pt+12}" style="fill:#fff">${L("nå","no","now")}</text>`;
  g+=`<path d="${line(act,p=>p.v,Y)}L${X(act.at(-1).t)},${Hh-pb}L${X(act[0].t)},${Hh-pb}Z" fill="url(#aa)"/><path d="${line(act,p=>p.v,Y)}" fill="none" stroke="#e8eefc" stroke-width="1.6"/>`;
  g+=`<path d="${line(fc,p=>p.v,Y)}L${X(fc.at(-1).t)},${Hh-pb}L${X(fc[0].t)},${Hh-pb}Z" fill="url(#fa)"/><path d="${line(fc,p=>p.v,Y)}" fill="none" stroke="#ffb36b" stroke-width="2" stroke-dasharray="5 4"/>`;
  g+=`<path d="${line(fc,p=>p.T,YT)}" fill="none" stroke="#7fd8ff" stroke-width="1.5" opacity=".9"/>`;
@@ -384,7 +395,7 @@ function drawChart(){
   svg.querySelector("#cx").setAttribute("x1",X(p.t));svg.querySelector("#cx").setAttribute("x2",X(p.t));svg.querySelector("#cx").setAttribute("opacity",.3);
   const cd=svg.querySelector("#cd");cd.setAttribute("cx",X(p.t));cd.setAttribute("cy",Y(p.v));cd.setAttribute("opacity",1);
   tip.style.opacity=1;tip.style.left=Math.max(8,Math.min(e.clientX+16,innerWidth-200))+"px";tip.style.top=Math.max(8,e.clientY-(e.pointerType==="touch"?120:70))+"px";
-  tip.innerHTML=`<div style="color:var(--dim)">${new Date(p.t).toLocaleString("no-NO",{weekday:"long",hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"})}</div><b>${fmt(p.v,0)} MWh</b> <span style="color:${p.k==="m"?"#e8eefc":"#ffb36b"}">${p.k==="m"?"målt":"prognose"}</span>${p.T!=null?`<div style="color:#7fd8ff">${fmt(p.T,1)} °C ${icon(p.s)}</div>`:""}`};
+  tip.innerHTML=`<div style="color:var(--dim)">${new Date(p.t).toLocaleString(LOC(),{weekday:"long",hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"})}</div><b>${fmt(p.v,0)} MWh</b> <span style="color:${p.k==="m"?"#e8eefc":"#ffb36b"}">${p.k==="m"?L("målt","målt","measured"):L("prognose","prognose","forecast")}</span>${p.T!=null?`<div style="color:#7fd8ff">${fmt(p.T,1)} °C ${icon(p.s)}</div>`:""}`};
  svg.querySelector("#hit").onpointerleave=svg.querySelector("#hit").onpointerup=()=>{tip.style.opacity=0};
 }
 const icon=s=>!s?"":s.includes("snow")||s.includes("sleet")?"❄️":s.includes("rain")?"🌧️":s.includes("fog")?"🌫️":s.includes("clearsky")?(s.includes("night")?"🌙":"☀️"):s.includes("partly")||s.includes("fair")?"⛅":"☁️";
@@ -398,9 +409,9 @@ function kpis(){
  const ref=wk.length>=24?wk.slice(0,24).reduce((s,p)=>s+p.v,0):base;
  const d=(n24/ref-1)*100;
  $("#k24").textContent=fmt(n24/1000,1);$("#kd").textContent=(d>0?"+":"")+fmt(d,1)+" %";$("#kd").className=d>0?"up":"down";
- $("#kt").textContent=fmt(fc[0].T,1)+"°";$("#ktw").textContent=icon(fc[0].s)+" "+(sel==="ALL"?"snitt fem byer":AREAS[sel].c);
- $("#heroKick").textContent="Prognose · "+(sel==="ALL"?"hele Norge":sel+" "+AREAS[sel].n+" ("+AREAS[sel].c+")");
- $("#chTitle").textContent=({ALL:"Hele Norge",NO1:"Østlandet",NO2:"Sørlandet",NO3:"Midt-Norge",NO4:"Nord-Norge",NO5:"Vestlandet"})[sel]+": én uke målt, ni dager varslet.";
+ $("#kt").textContent=fmt(fc[0].T,1)+"°";$("#ktw").textContent=icon(fc[0].s)+" "+(sel==="ALL"?L("snitt fem byer","snitt fem byar","avg. of five cities"):AREAS[sel].c);
+ $("#heroKick").textContent=L("Prognose · ","Prognose · ","Forecast · ")+(sel==="ALL"?L("hele Norge","heile Noreg","all of Norway"):sel+" "+an(sel)+" ("+AREAS[sel].c+")");
+ $("#chTitle").textContent=(sel==="ALL"?L("Hele Norge","Heile Noreg","All of Norway"):({NO1:L("Østlandet","Austlandet","Eastern Norway"),NO2:L("Sørlandet","Sørlandet","Southern Norway"),NO3:L("Midt-Norge","Midt-Noreg","Central Norway"),NO4:L("Nord-Norge","Nord-Noreg","Northern Norway"),NO5:L("Vestlandet","Vestlandet","Western Norway")})[sel])+L(": én uke målt, ni dager varslet.",": éi veke målt, ni dagar varsla.",": one week measured, nine days forecast.");
 }
 
 /* ---------- what-if ---------- */
@@ -410,12 +421,18 @@ function whatif(){
  $("#wiG").textContent=(dG>0?"+":"")+fmt(dG,1)+" GWh";$("#wiG").className=dG>0?"up":dG<0?"down":"";
  // avg Norwegian household ~ 16 000 kWh/yr ≈ 44 kWh/day
  const homes=Math.abs(dG*1e6/44),kr=Math.abs(dG*1e6*1.2);
- $("#wiP").innerHTML=v===0?"Flytt glidebryteren for å gjøre uka kaldere eller varmere.":`Det tilsvarer omtrent <b style="color:var(--ink)">${fmt(homes,0)}</b> husstanders strømforbruk i ett døgn, eller ca. <b style="color:var(--ink)">${fmt(kr/1e6,0)} mill. kr</b> ${dG>0?"ekstra":"spart"} med en strømpris på 1,20 kr/kWh. Hver rute er 10 000 husstander.`;
+ const B=x=>`<b style="color:var(--ink)">${x}</b>`;
+ $("#wiP").innerHTML=v===0?L("Flytt glidebryteren for å gjøre uka kaldere eller varmere.","Flytt glidebrytaren for å gjere veka kaldare eller varmare.","Move the slider to make the week colder or warmer."):
+  L(`Det tilsvarer omtrent ${B(fmt(homes,0))} husstanders strømforbruk i ett døgn, eller ca. ${B(fmt(kr/1e6,0)+" mill. kr")} ${dG>0?"ekstra":"spart"} med en strømpris på 1,20 kr/kWh. Hver rute er 10 000 husstander.`,
+    `Det svarar til om lag ${B(fmt(homes,0))} hushalds straumforbruk i eitt døgn, eller ca. ${B(fmt(kr/1e6,0)+" mill. kr")} ${dG>0?"ekstra":"spart"} med ein straumpris på 1,20 kr/kWh. Kvar rute er 10 000 hushald.`,
+    `That equals about ${B(fmt(homes,0))} households' electricity use for one day, or roughly ${B("NOK "+fmt(kr/1e6,0)+" million")} ${dG>0?"extra":"saved"} at a price of NOK 1.20/kWh. Each square is 10,000 households.`);
  const n=Math.min(300,Math.round(homes/1e4));$("#equiv").innerHTML=Array.from({length:n},(_,i)=>`<i style="--c:${dG>0?"#ff8a5b":"#3ef0a0"};animation-delay:${i*4}ms"></i>`).join("");
  drawChart();
 }
 
 /* ---------- groups ---------- */
+const gn=g=>({household:L("Husholdning","Hushald","Households"),cabin:L("Hytter","Hytter","Cabins"),tertiary:L("Tjenesteyting","Tenesteyting","Services"),secondary:L("Industri","Industri","Industry"),primary:L("Primærnæring","Primærnæring","Primary industries")})[g];
+const an=a=>({NO1:L("Øst","Aust","East"),NO2:L("Sør","Sør","South"),NO3:L("Midt","Midt","Central"),NO4:L("Nord","Nord","North"),NO5:L("Vest","Vest","West")})[a];
 const EMO={household:"🏠",cabin:"🛖",tertiary:"🏢",secondary:"🏭",primary:"🚜"};
 let gSel="cabin",guessed=null;
 const weekTot=dT=>{const f=fcAll(dT).slice(0,168),o={};for(const g in GROUPS)o[g]=f.reduce((s,p)=>s+p.by[g],0);return o};
@@ -423,44 +440,55 @@ function groups(){
  const base=weekTot(0),sum=Object.values(base).reduce((a,b)=>a+b,0),win=Object.keys(base).reduce((a,b)=>base[b]>base[a]?b:a);
  // 1 quiz
  const q=$("#quiz");q.className="quiz"+(guessed?" done":"");
- q.innerHTML=Object.entries(GROUPS).map(([g,[n,,c]])=>`<button data-g="${g}" style="--c:${c}" class="${guessed?(g===win?"right":g===guessed?"wrong":""):""}"><span class="e">${EMO[g]}</span>${n}<span class="pct">${fmt(base[g]/sum*100,0)} %</span><span class="fill" style="width:${guessed?base[g]/sum*100:0}%"></span></button>`).join("");
+ q.innerHTML=Object.entries(GROUPS).map(([g,[n,,c]])=>`<button data-g="${g}" style="--c:${c}" class="${guessed?(g===win?"right":g===guessed?"wrong":""):""}"><span class="e">${EMO[g]}</span>${gn(g)}<span class="pct">${fmt(base[g]/sum*100,0)} %</span><span class="fill" style="width:${guessed?base[g]/sum*100:0}%"></span></button>`).join("");
  q.onclick=e=>{const b=e.target.closest("button");if(!b)return;guessed=b.dataset.g;groups()};
- $("#qa").innerHTML=!guessed?"Trykk på den du tror.":(guessed===win?"<b>Riktig!</b> ":"<b>Ikke helt.</b> ")+`<b>${GROUPS[win][0]}</b> bruker mest, ${fmt(base[win]/sum*100,0)} % av strømmen${sel==="ALL"?"":" i "+sel} den neste uka. ${win==="secondary"?"Norsk industri, som aluminiumsverk, bruker mye strøm døgnet rundt.":"Mye av den går til oppvarming."}`;
+ const pc=fmt(base[win]/sum*100,0),gw=`<b>${gn(win)}</b>`,inA=sel==="ALL"?"":L(" i "," i "," in ")+sel;
+ $("#qa").innerHTML=!guessed?L("Trykk på den du tror.","Trykk på den du trur.","Tap your guess."):(guessed===win?L("<b>Riktig!</b> ","<b>Rett!</b> ","<b>Correct!</b> "):L("<b>Ikke helt.</b> ","<b>Ikkje heilt.</b> ","<b>Not quite.</b> "))+
+  L(`${gw} bruker mest, ${pc} % av strømmen${inA} den neste uka. `,`${gw} brukar mest, ${pc} % av straumen${inA} den neste veka. `,`${gw} uses the most, ${pc} % of electricity${inA} over the next week. `)+
+  (win==="secondary"?L("Norsk industri, som aluminiumsverk, bruker mye strøm døgnet rundt.","Norsk industri, som aluminiumsverk, brukar mykje straum døgeret rundt.","Norwegian industry, like aluminium smelters, uses a lot of power around the clock."):L("Mye av den går til oppvarming.","Mykje av han går til oppvarming.","Much of it goes to heating."));
  // 2 thermometer
  const s=$("#gSlide");s.oninput=thermo;thermo();
  // 3 heatmap
- $("#gTabs").innerHTML=Object.entries(GROUPS).map(([g,[n]])=>`<button class="tab${g===gSel?" on":""}" data-g="${g}">${EMO[g]} ${n}</button>`).join("");
+ $("#gTabs").innerHTML=Object.entries(GROUPS).map(([g,[n]])=>`<button class="tab${g===gSel?" on":""}" data-g="${g}">${EMO[g]} ${gn(g)}</button>`).join("");
  $("#gTabs").onclick=e=>{const b=e.target.closest("button");if(b){gSel=b.dataset.g;groups()}};
  heat();
  // facts
  const fc=fcAll(),cold1=fc.reduce((a,b)=>b.T<a.T?b:a),pk=actual().reduce((a,b)=>b.v>a.v?b:a);
  $("#facts").innerHTML=[
-  ["Kaldeste time i varselet",`${fmt(cold1.T,1)}°`,`${new Date(cold1.t).toLocaleString("no-NO",{weekday:"long",hour:"2-digit",minute:"2-digit"})}. Anslått forbruk: ${fmt(cold1.v,0)} MWh den timen.`],
-  ["Høyeste målte time siste fire uker",`${fmt(pk.v,0)} MWh`,`${new Date(pk.t).toLocaleString("no-NO",{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}${sel==="ALL"?" for hele landet":" i "+sel}.`],
-  ["Strøm neste uke",`${fmt(sum/1000,0)} GWh`,`Omtrent det ${fmt(sum*1000/44/1e6,1)} millioner husstander bruker på ett døgn.`],
+  [L("Kaldeste time i varselet","Kaldaste time i varselet","Coldest hour in the forecast"),`${fmt(cold1.T,1)}°`,`${new Date(cold1.t).toLocaleString(LOC(),{weekday:"long",hour:"2-digit",minute:"2-digit"})}. ${L("Anslått forbruk","Anslått forbruk","Estimated consumption")}: ${fmt(cold1.v,0)} MWh${L(" den timen."," den timen."," that hour.")}`],
+  [L("Høyeste målte time siste fire uker","Høgaste målte time siste fire veker","Highest measured hour, last four weeks"),`${fmt(pk.v,0)} MWh`,`${new Date(pk.t).toLocaleString(LOC(),{weekday:"long",day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"})}${sel==="ALL"?L(" for hele landet"," for heile landet"," for all of Norway"):L(" i "," i "," in ")+sel}.`],
+  [L("Strøm neste uke","Straum neste veke","Electricity next week"),`${fmt(sum/1000,0)} GWh`,L(`Omtrent det ${fmt(sum*1000/44/1e6,1)} millioner husstander bruker på ett døgn.`,`Om lag det ${fmt(sum*1000/44/1e6,1)} millionar hushald brukar på eitt døgn.`,`About what ${fmt(sum*1000/44/1e6,1)} million households use in a day.`)],
  ].map(([s,b,p])=>`<div class="card"><small>${s}</small><strong>${b}</strong><p>${p}</p></div>`).join("");
 }
 function thermo(){
  const dT=+$("#gSlide").value;document.querySelectorAll("#gPre button").forEach(b=>b.classList.toggle("on",+b.dataset.v===dT));$("#gT").textContent=(dT>0?"+":"")+dT;
  const b=weekTot(0),x=weekTot(dT),mx=Math.max(...Object.values(weekTot(-20)));
  $("#bars").innerHTML=Object.entries(GROUPS).map(([g,[n,,c]])=>{const p=(x[g]/b[g]-1)*100,lo=Math.min(b[g],x[g]),hi=Math.max(b[g],x[g]);
-  return`<div class="bar" style="--c:${c}"><span>${EMO[g]} ${n}</span><div><i style="width:${lo/mx*100}%"></i><b style="left:${lo/mx*100}%;width:${(hi-lo)/mx*100}%;background-color:${dT<0?c+"88":"transparent"}"></b></div><em>${fmt(x[g]/1000,0)} GWh ${dT?`<b style="color:${p>0?"var(--hot)":"#3ef0a0"}">${p>0?"+":""}${fmt(p,0)} %</b>`:""}</em></div>`}).join("");
+  return`<div class="bar" style="--c:${c}"><span>${EMO[g]} ${gn(g)}</span><div><i style="width:${lo/mx*100}%"></i><b style="left:${lo/mx*100}%;width:${(hi-lo)/mx*100}%;background-color:${dT<0?c+"88":"transparent"}"></b></div><em>${fmt(x[g]/1000,0)} GWh ${dT?`<b style="color:${p>0?"var(--hot)":"#3ef0a0"}">${p>0?"+":""}${fmt(p,0)} %</b>`:""}</em></div>`}).join("");
  const order=Object.keys(GROUPS).sort((a,c)=>GROUPS[c][1]-GROUPS[a][1]);
- $("#gNote").innerHTML=dT===0?"Stolpene viser forbruket neste uke med vanlig vær. Dra termometeret ned.":
-  `Med ${Math.abs(dT)} grader ${dT<0?"kaldere":"varmere"} vær endrer <b>${GROUPS[order[0]][0].toLowerCase()}</b> og <b>${GROUPS[order[1]][0].toLowerCase()}</b> forbruket mest, fordi mye av strømmen der går til oppvarming. <b>Industrien</b> endrer seg nesten ikke. Til sammen blir det <b>${(()=>{const d=(Object.values(x).reduce((a,c)=>a+c)-Object.values(b).reduce((a,c)=>a+c))/1000;return(d>0?"+":"")+fmt(d,0)})()} GWh</b> neste uke.`;
+ const tot=(()=>{const d=(Object.values(x).reduce((a,c)=>a+c)-Object.values(b).reduce((a,c)=>a+c))/1000;return(d>0?"+":"")+fmt(d,0)})(),g0=gn(order[0]).toLowerCase(),g1=gn(order[1]).toLowerCase(),ad=Math.abs(dT);
+ $("#gNote").innerHTML=dT===0?L("Stolpene viser forbruket neste uke med vanlig vær. Dra termometeret ned.","Stolpane viser forbruket neste veke med vanleg vêr. Dra termometeret ned.","The bars show next week's consumption in normal weather. Drag the thermometer down."):
+  L(`Med ${ad} grader ${dT<0?"kaldere":"varmere"} vær endrer <b>${g0}</b> og <b>${g1}</b> forbruket mest, fordi mye av strømmen der går til oppvarming. <b>Industrien</b> endrer seg nesten ikke. Til sammen blir det <b>${tot} GWh</b> neste uke.`,
+    `Med ${ad} grader ${dT<0?"kaldare":"varmare"} vêr endrar <b>${g0}</b> og <b>${g1}</b> forbruket mest, fordi mykje av straumen der går til oppvarming. <b>Industrien</b> endrar seg nesten ikkje. Til saman blir det <b>${tot} GWh</b> neste veke.`,
+    `With ${ad} degrees ${dT<0?"colder":"warmer"} weather, <b>${g0}</b> and <b>${g1}</b> change the most, because much of their electricity goes to heating. <b>Industry</b> barely changes. In total that is <b>${tot} GWh</b> next week.`);
 }
 function heat(){
  const ar=areasOf(),c=GROUPS[gSel][2],p=Array(168).fill(0);
  for(const a of ar)EL.prof[a+"|"+gSel].forEach((v,i)=>p[i]+=v);
- const mn=Math.min(...p),mx=Math.max(...p),D=["man","tir","ons","tor","fre","lør","søn"];
+ const mn=Math.min(...p),mx=Math.max(...p),D=L(["man","tir","ons","tor","fre","lør","søn"],["mån","tys","ons","tor","fre","lau","sun"],["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]),kl=L("kl.","kl.","at");
  let h="<span></span>"+[...Array(24)].map((_,i)=>`<span style="text-align:center">${i%(innerWidth<600?6:3)?"":i}</span>`).join("");
- for(let d=0;d<7;d++){h+=`<span>${D[d]}</span>`;for(let k=0;k<24;k++){const v=p[d*24+k];h+=`<i style="--c:${c};--o:${.08+.92*((v-mn)/(mx-mn||1))}" data-t="${D[d]} kl. ${String(k).padStart(2,"0")}" data-v="${v}"></i>`}}
+ for(let d=0;d<7;d++){h+=`<span>${D[d]}</span>`;for(let k=0;k<24;k++){const v=p[d*24+k];h+=`<i style="--c:${c};--o:${.08+.92*((v-mn)/(mx-mn||1))}" data-t="${D[d]} ${kl} ${String(k).padStart(2,"0")}" data-v="${v}"></i>`}}
  const el=$("#heat"),tip=$("#tip");el.innerHTML=h;
- el.onpointermove=el.onpointerdown=e=>{const i=e.target.dataset;if(!i.v){tip.style.opacity=0;return}tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-190)+"px";tip.style.top=e.clientY-(e.pointerType==="touch"?100:60)+"px";tip.innerHTML=`<div style="color:var(--dim)">${i.t}, snitt siste 4 uker</div><b>${fmt(+i.v,0)} MWh</b>`};
+ el.onpointermove=el.onpointerdown=e=>{const i=e.target.dataset;if(!i.v){tip.style.opacity=0;return}tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-190)+"px";tip.style.top=e.clientY-(e.pointerType==="touch"?100:60)+"px";tip.innerHTML=`<div style="color:var(--dim)">${i.t}, ${L("snitt siste 4 uker","snitt siste 4 veker","avg. last 4 weeks")}</div><b>${fmt(+i.v,0)} MWh</b>`};
  el.onpointerleave=()=>tip.style.opacity=0;
  const day=d=>p.slice(d*24,d*24+24).reduce((a,b)=>a+b),wd=[0,1,2,3,4].reduce((s,d)=>s+day(d),0)/5,we=(day(5)+day(6))/2,pk=p.indexOf(mx);
- const story={household:"Forbruket stiger om morgenen og er høyest om kvelden, når folk er hjemme, lager mat og vasker klær.",cabin:"Se fredagen: folk skrur på varmen før de reiser til hytta, og forbruket holder seg høyt gjennom helgen.",tertiary:"Kontorer og butikker følger arbeidstiden. Kveldene og helgene er stille.",secondary:"Industrien går døgnet rundt. Ruta er nesten like lys overalt.",primary:"Gårder og fiske bruker strøm jevnt, med en liten topp på dagtid."}[gSel];
- $("#heatNote").innerHTML=`${story} Toppen er <b>${D[Math.floor(pk/24)]} kl. ${pk%24}</b>. I helgen bruker de <b>${we>wd?"+":""}${fmt((we/wd-1)*100,0)} %</b> sammenlignet med en hverdag. Lysere rute = mer strøm.`;
+ const story={household:L("Forbruket stiger om morgenen og er høyest om kvelden, når folk er hjemme, lager mat og vasker klær.","Forbruket stig om morgonen og er høgast om kvelden, når folk er heime, lagar mat og vaskar klede.","Consumption rises in the morning and peaks in the evening, when people are home cooking and doing laundry."),
+  cabin:L("Se fredagen: folk skrur på varmen før de reiser til hytta, og forbruket holder seg høyt gjennom helgen.","Sjå fredagen: folk skrur på varmen før dei reiser på hytta, og forbruket held seg høgt gjennom helga.","Look at Friday: people switch on the heat before driving to the cabin, and use stays high through the weekend."),
+  tertiary:L("Kontorer og butikker følger arbeidstiden. Kveldene og helgene er stille.","Kontor og butikkar følgjer arbeidstida. Kveldane og helgane er stille.","Offices and shops follow working hours. Evenings and weekends are quiet."),
+  secondary:L("Industrien går døgnet rundt. Ruta er nesten like lys overalt.","Industrien går døgeret rundt. Ruta er nesten like lys overalt.","Industry runs around the clock. The grid is almost equally bright everywhere."),
+  primary:L("Gårder og fiske bruker strøm jevnt, med en liten topp på dagtid.","Gardar og fiske brukar straum jamt, med ein liten topp på dagtid.","Farms and fisheries use power evenly, with a small daytime peak.")}[gSel];
+ const pw=`<b>${D[Math.floor(pk/24)]} ${kl} ${pk%24}</b>`,wk=`<b>${we>wd?"+":""}${fmt((we/wd-1)*100,0)} %</b>`;
+ $("#heatNote").innerHTML=story+L(` Toppen er ${pw}. I helgen bruker de ${wk} sammenlignet med en hverdag. Lysere rute = mer strøm.`,` Toppen er ${pw}. I helga brukar dei ${wk} samanlikna med ein kvardag. Lysare rute = meir straum.`,` The peak is ${pw}. At weekends they use ${wk} compared with a weekday. Brighter cell = more power.`);
 }
 
 function select(a){sel=a;drawMap();kpis();whatif();groups();setSky();act();
@@ -477,17 +505,17 @@ async function loadPrices(a){
  // aggregate to hours (handles 15-minute prices too)
  const by={};for(const r of rows){const t=new Date(r.time_start);t.setMinutes(0,0,0);(by[+t]??=[]).push(r.NOK_per_kWh)}
  const out=Object.entries(by).map(([t,v])=>({t:+t,p:v.reduce((a,b)=>a+b)/v.length})).sort((a,b)=>a.t-b.t);
- const b=$("#bPr");b.classList.remove("live","snap");b.classList.add(out.length?"live":"snap");b.lastChild.textContent=out.length?"Pris live":"Pris mangler";
+ const b=$("#bPr");b.classList.remove("live","snap");b.classList.add(out.length?"live":"snap");b.lastChild.textContent=out.length?L("Pris live","Pris live","Price live"):L("Pris mangler","Pris manglar","Price missing");
  return PRICES[a]=out;
 }
-const hhmm=t=>new Date(t).toLocaleTimeString("no-NO",{hour:"2-digit",minute:"2-digit"});
-const dayName=t=>{const d=new Date(t),n=new Date();const diff=Math.round((new Date(d).setHours(0,0,0,0)-new Date(n).setHours(0,0,0,0))/864e5);return diff===0?"i dag":diff===1?"i morgen":d.toLocaleDateString("no-NO",{weekday:"long"})};
-const r0=v=>Math.round(v)||0;const kr=v=>fmt(v,v<10?2:0)+" kr";
+const hhmm=t=>new Date(t).toLocaleTimeString(LOC(),{hour:"2-digit",minute:"2-digit"});
+const dayName=t=>{const d=new Date(t),n=new Date();const diff=Math.round((new Date(d).setHours(0,0,0,0)-new Date(n).setHours(0,0,0,0))/864e5);return diff===0?L("i dag","i dag","today"):diff===1?L("i morgen","i morgon","tomorrow"):d.toLocaleDateString(LOC(),{weekday:"long"})};
+const r0=v=>Math.round(v)||0;const kr=v=>LANG==="en"?"NOK "+fmt(v,v<10?2:0):fmt(v,v<10?2:0)+" kr";
 function win(ps,n,f){let best=null;for(let i=0;i+n<=ps.length;i++){const m=ps.slice(i,i+n).reduce((s,p)=>s+p.p,0)/n;if(!best||f(m,best.m))best={i,m}}return best}
 async function act(){
  const a=sel==="ALL"?"NO1":sel,A=AREAS[a],kwh=Math.max(1000,+$("#kwh").value||16000),daily=kwh/365;
- $("#actKick").textContent=`For deg · ${a} ${A.c}`;
- $("#actSub").innerHTML=sel==="ALL"?`Viser prisområde <b>NO1 (Østlandet)</b>. Klikk på kartet for å velge ditt område.`:`Prisområde <b>${a}</b>. Temperaturen er fra ${A.c}.`;
+ $("#actKick").textContent=`${L("For deg","For deg","For you")} · ${a} ${A.c}`;
+ $("#actSub").innerHTML=sel==="ALL"?L(`Viser prisområde <b>NO1 (Østlandet)</b>. Klikk på kartet for å velge ditt område.`,`Viser prisområde <b>NO1 (Austlandet)</b>. Klikk på kartet for å velje området ditt.`,`Showing price area <b>NO1 (Eastern Norway)</b>. Click the map to choose your area.`):L(`Prisområde <b>${a}</b>. Temperaturen er fra ${A.c}.`,`Prisområde <b>${a}</b>. Temperaturen er frå ${A.c}.`,`Price area <b>${a}</b>. Temperature is from ${A.c}.`);
  const all=await loadPrices(a);if(a!==(sel==="ALL"?"NO1":sel))return;
  const now=Date.now()-H,ps=all.filter(p=>p.t>=now);
  const avg=ps.length?ps.reduce((s,p)=>s+p.p,0)/ps.length:1.2;
@@ -498,29 +526,30 @@ async function act(){
   const mx=Math.max(...ps.map(p=>p.p));
   $("#prices").innerHTML=ps.map((p,i)=>`<i class="${i>=lo.i&&i<lo.i+3?"lo":i>=hi.i&&i<hi.i+3?"hi":""}${i===0?" now":""}" style="height:${Math.max(2,p.p/mx*100)}%" data-t="${dayName(p.t)} ${hhmm(p.t)}" data-p="${p.p}"></i>`).join("");
   $("#paxis").innerHTML=ps.map(p=>`<span>${new Date(p.t).getHours()%6===0?(new Date(p.t).getHours()===0?dayName(p.t).slice(0,8):hhmm(p.t).slice(0,2)):""}</span>`).join("");
-  $("#lo").textContent=`${dayName(ps[lo.i].t)} ${hhmm(ps[lo.i].t)}–${hhmm(ps[lo.i].t+3*H)}`;$("#loP").textContent=`snitt ${kr(lo.m)}/kWh`;
-  $("#hi").textContent=`${dayName(ps[hi.i].t)} ${hhmm(ps[hi.i].t)}–${hhmm(ps[hi.i].t+3*H)}`;$("#hiP").textContent=`snitt ${kr(hi.m)}/kWh`;
+  $("#lo").textContent=`${dayName(ps[lo.i].t)} ${hhmm(ps[lo.i].t)}–${hhmm(ps[lo.i].t+3*H)}`;$("#loP").textContent=`${L("snitt","snitt","avg.")} ${kr(lo.m)}/kWh`;
+  $("#hi").textContent=`${dayName(ps[hi.i].t)} ${hhmm(ps[hi.i].t)}–${hhmm(ps[hi.i].t+3*H)}`;$("#hiP").textContent=`${L("snitt","snitt","avg.")} ${kr(hi.m)}/kWh`;
   const el=$("#prices"),tip=$("#tip");
-  el.onpointermove=el.onpointerdown=e=>{const d=e.target.dataset;if(!d.p){tip.style.opacity=0;return}tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-180)+"px";tip.style.top=e.clientY-(e.pointerType==="touch"?100:60)+"px";tip.innerHTML=`<div style="color:var(--dim)">${d.t}</div><b>${fmt(+d.p,2)} kr/kWh</b>`};
+  el.onpointermove=el.onpointerdown=e=>{const d=e.target.dataset;if(!d.p){tip.style.opacity=0;return}tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-180)+"px";tip.style.top=e.clientY-(e.pointerType==="touch"?100:60)+"px";tip.innerHTML=`<div style="color:var(--dim)">${d.t}</div><b>${kr(+d.p)}/kWh</b>`};
   el.onpointerleave=()=>tip.style.opacity=0;
- }else{$("#prices").innerHTML=`<p style="color:var(--dim);align-self:center">Fant ikke strømpriser akkurat nå. Tipsene under bruker 1,20 kr/kWh.</p>`;$("#paxis").innerHTML="";$("#lo").textContent=$("#hi").textContent="–";$("#loP").textContent=$("#hiP").textContent=""}
+ }else{$("#prices").innerHTML=`<p style="color:var(--dim);align-self:center">${L("Fant ikke strømpriser akkurat nå. Tipsene under bruker 1,20 kr/kWh.","Fann ikkje straumprisar akkurat no. Tipsa under brukar 1,20 kr/kWh.","Could not load electricity prices right now. The tips below use NOK 1.20/kWh.")}</p>`;$("#paxis").innerHTML="";$("#lo").textContent=$("#hi").textContent="–";$("#loP").textContent=$("#hiP").textContent=""}
  // cold days
  const f=MET.h[a].filter(p=>p.t>=now),days={};
  for(const p of f){const k=new Date(p.t).toDateString();(days[k]??={t:p.t,T:[]}).T.push(p.T)}
  const rows=Object.values(days).filter(d=>d.T.length>=4).slice(0,8).map(d=>{const mean=d.T.reduce((a,b)=>a+b)/d.T.length,mn=Math.min(...d.T),dev=mean-A.norm,extra=Math.max(0,-dev)*.03*daily;return{...d,mean,mn,dev,extra}});
- $("#days").innerHTML=`<tr><th>Dag</th><th>Snitt</th><th>Min</th><th>Mot normalt</th><th>Ekstra strøm for deg</th></tr>`+rows.map(d=>`<tr class="${d.dev<-3?"cold":""}"><td>${dayName(d.t)}</td><td>${fmt(r0(d.mean),0)}°</td><td>${fmt(r0(d.mn),0)}°</td><td>${r0(d.dev)>0?"+":""}${fmt(r0(d.dev),0)}°</td><td>${d.extra>.05?"+"+fmt(d.extra,1)+" kWh":"–"}</td></tr>`).join("");
+ $("#days").innerHTML=`<tr><th>${L("Dag","Dag","Day")}</th><th>${L("Snitt","Snitt","Avg.")}</th><th>Min</th><th>${L("Mot normalt","Mot normalt","vs. normal")}</th><th>${L("Ekstra strøm for deg","Ekstra straum for deg","Extra power for you")}</th></tr>`+rows.map(d=>`<tr class="${d.dev<-3?"cold":""}"><td>${dayName(d.t)}</td><td>${fmt(r0(d.mean),0)}°</td><td>${fmt(r0(d.mn),0)}°</td><td>${r0(d.dev)>0?"+":""}${fmt(r0(d.dev),0)}°</td><td>${d.extra>.05?"+"+fmt(d.extra,1)+" kWh":"–"}</td></tr>`).join("");
  const coldest=rows.reduce((x,y)=>y.mean<x.mean?y:x,rows[0]);
  // todo list
  const diff=lo&&hi?hi.m-lo.m:0,heatWeek=daily*7*.6*.05,extraWeek=rows.slice(0,7).reduce((s,d)=>s+d.extra,0);
  const items=[];
+ const lw=dayName(ps[lo?.i??0]?.t),lt=lo?hhmm(ps[lo.i].t):"",lt2=lo?hhmm(ps[lo.i].t+3*H):"",hw=hi?dayName(ps[hi.i].t):"",ht=hi?hhmm(ps[hi.i].t):"",ht2=hi?hhmm(ps[hi.i].t+3*H):"";
  if(diff>0.05){
-  items.push([`Lad elbilen ${dayName(ps[lo.i].t)} kl. ${hhmm(ps[lo.i].t)}`,`En lading på 30 kWh i det billigste vinduet i stedet for det dyreste.`,diff*30]);
-  items.push([`Kjør vaskemaskin og oppvask mellom ${hhmm(ps[lo.i].t)} og ${hhmm(ps[lo.i].t+3*H)}`,`Fire vask à 2 kWh, flyttet bort fra ${dayName(ps[hi.i].t)} ${hhmm(ps[hi.i].t)}–${hhmm(ps[hi.i].t+3*H)}.`,diff*8]);
+  items.push([L(`Lad elbilen ${lw} kl. ${lt}`,`Lad elbilen ${lw} kl. ${lt}`,`Charge your EV ${lw} at ${lt}`),L("En lading på 30 kWh i det billigste vinduet i stedet for det dyreste.","Ei lading på 30 kWh i det billegaste vindauget i staden for det dyraste.","A 30 kWh charge in the cheapest window instead of the most expensive."),diff*30]);
+  items.push([L(`Kjør vaskemaskin og oppvask mellom ${lt} og ${lt2}`,`Køyr vaskemaskin og oppvask mellom ${lt} og ${lt2}`,`Run the washing machine and dishwasher between ${lt} and ${lt2}`),L(`Fire vask à 2 kWh, flyttet bort fra ${hw} ${ht}–${ht2}.`,`Fire vask à 2 kWh, flytta bort frå ${hw} ${ht}–${ht2}.`,`Four loads of 2 kWh, moved away from ${hw} ${ht}–${ht2}.`),diff*8]);
  }
- if(coldest&&coldest.dev<-1)items.push([`Planlegg for kulda ${dayName(coldest.t)}`,`Snittet blir ${fmt(coldest.mean,0)}°, ${fmt(-coldest.dev,0)} grader under normalen. Da er strømmen ofte dyrest morgen og ettermiddag. Flytt vasking, lading og annet som kan vente til natta, og hold dører til kalde rom lukket.`,null]);
- items.push(["Senk innetemperaturen én grad neste uke",`Om lag ${fmt(heatWeek,0)} kWh mindre, med ditt forbruk på ${fmt(kwh,0)} kWh i året.`,heatWeek*avg]);
- if(extraWeek>0.5)items.push(["Regn med høyere regning",`Kulda neste uke gjør at du trolig bruker ${fmt(extraWeek,0)} kWh mer enn i en normaluke.`,-extraWeek*avg]);
- $("#todoList").innerHTML=items.map(([h,p,v],i)=>`<li><span>${i+1}.</span><div><b>${h}</b><p>${p}</p></div>${v==null?"<strong></strong>":`<strong style="${v<0?"color:var(--hot)":""}">${v<0?"ca. +"+kr(-v):"spar ca. "+kr(v)}</strong>`}</li>`).join("");
+ if(coldest&&coldest.dev<-1){const cw=dayName(coldest.t),cm=fmt(coldest.mean,0),cd=fmt(-coldest.dev,0);items.push([L(`Planlegg for kulda ${cw}`,`Planlegg for kulda ${cw}`,`Plan for the cold ${cw}`),L(`Snittet blir ${cm}°, ${cd} grader under normalen. Da er strømmen ofte dyrest morgen og ettermiddag. Flytt vasking, lading og annet som kan vente til natta, og hold dører til kalde rom lukket.`,`Snittet blir ${cm}°, ${cd} grader under normalen. Då er straumen ofte dyrast morgon og ettermiddag. Flytt vasking, lading og anna som kan vente til natta, og hald dører til kalde rom lukka.`,`The average will be ${cm}°, ${cd} degrees below normal. Power is often most expensive in the morning and afternoon. Move laundry, charging and anything else that can wait to the night, and keep doors to cold rooms closed.`),null])}
+ items.push([L("Senk innetemperaturen én grad neste uke","Senk innetemperaturen éin grad neste veke","Lower the indoor temperature by one degree next week"),L(`Om lag ${fmt(heatWeek,0)} kWh mindre, med ditt forbruk på ${fmt(kwh,0)} kWh i året.`,`Om lag ${fmt(heatWeek,0)} kWh mindre, med forbruket ditt på ${fmt(kwh,0)} kWh i året.`,`About ${fmt(heatWeek,0)} kWh less, given your use of ${fmt(kwh,0)} kWh a year.`),heatWeek*avg]);
+ if(extraWeek>0.5)items.push([L("Regn med høyere regning","Rekn med høgare rekning","Expect a higher bill"),L(`Kulda neste uke gjør at du trolig bruker ${fmt(extraWeek,0)} kWh mer enn i en normaluke.`,`Kulda neste veke gjer at du truleg brukar ${fmt(extraWeek,0)} kWh meir enn i ei normalveke.`,`The cold next week means you will probably use ${fmt(extraWeek,0)} kWh more than in a normal week.`),-extraWeek*avg]);
+ $("#todoList").innerHTML=items.map(([h,p,v],i)=>`<li><span>${i+1}.</span><div><b>${h}</b><p>${p}</p></div>${v==null?"<strong></strong>":`<strong style="${v<0?"color:var(--hot)":""}">${v<0?L("ca. +","ca. +","approx. +")+kr(-v):L("spar ca. ","spar ca. ","save approx. ")+kr(v)}</strong>`}</li>`).join("");
 }
 
 const cv=$("#sky"),cx=cv.getContext("2d");let parts=[],mode="stars";
@@ -535,13 +564,15 @@ function tick(t){cx.clearRect(0,0,cv.width,cv.height);
  requestAnimationFrame(tick)}
 
 (async()=>{
- {const c=$("#cold");for(let i=0;i<5;i++)c.insertAdjacentHTML("beforeend",`<span class="fl" style="left:${10+i*18}%;animation-delay:${i*1.1}s">❄</span>`)}
+ applyStatic();
  sky();addEventListener("resize",()=>{sky();drawChart()});
  [MET,EL]=await Promise.all([loadMet(),loadEl()]);build();
- $("#tabs").innerHTML=[["ALL","Hele Norge"],...Object.entries(AREAS).map(([a,p])=>[a,a+" "+p.n])].map(([a,n])=>`<button class="tab" data-a="${a}">${n}</button>`).join("");
+ const tabs=()=>{$("#tabs").innerHTML=[["ALL",L("Hele Norge","Heile Noreg","All of Norway")],...Object.keys(AREAS).map(a=>[a,a+" "+an(a)])].map(([a,n])=>`<button class="tab" data-a="${a}">${n}</button>`).join("");
+  $("#cgTabs").innerHTML=[["ALL",L("Alle kunder","Alle kundar","All customers")],...Object.keys(GROUPS).map(g=>[g,EMO[g]+" "+gn(g)])].map(([g,n])=>`<button class="tab${g===cg?" on":""}" data-g="${g}">${n}</button>`).join("")};
+ tabs();
+ $("#langs").onclick=e=>{const b=e.target.closest("button");if(!b)return;LANG=b.dataset.l;localStorage.setItem("lang",LANG);const u=new URL(location);u.searchParams.set("lang",LANG);history.replaceState(null,"",u);applyStatic();tabs();select(sel)};
  $("#tabs").onclick=e=>e.target.dataset.a&&select(e.target.dataset.a);
  $("#slider").oninput=whatif;$("#kwh").oninput=act;
- $("#cgTabs").innerHTML=[["ALL","Alle kunder"],...Object.entries(GROUPS).map(([g,[n]])=>[g,EMO[g]+" "+n])].map(([g,n])=>`<button class="tab${g==="ALL"?" on":""}" data-g="${g}">${n}</button>`).join("");
  $("#cgTabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;cg=b.dataset.g;$("#cgTabs").querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));drawChart()};
  $("#gPre").innerHTML=[-20,-10,-5,0,5].map(v=>`<button data-v="${v}">${v>0?"+":""}${v}°</button>`).join("");
  $("#gPre").onclick=e=>{const b=e.target.closest("button");if(!b)return;$("#gSlide").value=b.dataset.v;thermo()};
