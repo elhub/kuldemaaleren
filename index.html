@@ -77,6 +77,11 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border-radius:50%;bac
 .bar div{height:12px;border-radius:9px;background:#141b2c;overflow:hidden}
 .bar div i{display:block;height:100%;border-radius:9px;background:var(--c);transition:width 1s cubic-bezier(.2,.8,.2,1)}
 .bar em{font-style:normal;color:var(--dim);text-align:right}
+.tabs.sm{margin-top:10px}.tabs.sm .tab{padding:5px 11px;font-size:12px}
+.presets{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.presets button{background:#0e1528;border:1px solid var(--line);color:var(--ink);border-radius:99px;padding:6px 10px;font:600 12px Inter;cursor:pointer}
+.presets button.on{background:var(--ink);color:var(--bg)}
+#gSlide{touch-action:none}
 .h3{font:300 24px Fraunces,serif;margin:6px 0 18px}
 .qa{color:var(--dim);font-size:15px;margin-top:16px;min-height:1.5em}.qa b{color:var(--ink)}
 .quiz{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
@@ -98,10 +103,10 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border-radius:50%;bac
 .bar div i{transition:width .35s}
 .bar div b{position:absolute;top:0;height:100%;background:repeating-linear-gradient(45deg,#fff3 0 4px,transparent 4px 8px);transition:.35s;border-radius:0 9px 9px 0}
 .bar em b{color:var(--hot);font-weight:600}
-.heat{display:grid;grid-template-columns:34px repeat(24,1fr);gap:2px;margin-top:18px;font-size:10px;color:var(--dim)}
+.heat{display:grid;width:100%;overflow:hidden;grid-template-columns:34px repeat(24,minmax(0,1fr));gap:2px;margin-top:18px;font-size:10px;color:var(--dim)}
 .heat i{aspect-ratio:1.6;border-radius:3px;background:var(--c);opacity:var(--o);cursor:crosshair;transition:transform .15s}
 .heat i:hover{transform:scale(1.4);outline:1px solid #fff}
-@media(max-width:860px){.quiz{grid-template-columns:1fr 1fr}.thermo{grid-template-columns:1fr}#gSlide{writing-mode:horizontal-tb;direction:ltr;width:100%;height:8px}}
+@media(max-width:860px){.quiz{grid-template-columns:1fr 1fr}.thermo{grid-template-columns:1fr}#gSlide{writing-mode:horizontal-tb;direction:ltr;width:100%;height:10px;margin:14px 0;background:linear-gradient(90deg,#5ac8ff,#2a3350 66%,#ff8a5b)}.tcol{display:block;text-align:center}}
 footer{color:var(--dim);font-size:13px;margin-top:90px;border-top:1px solid var(--line);padding-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:30px}
 footer a{color:var(--ice)}
 .reveal{opacity:0;transform:translateY(30px);transition:1s cubic-bezier(.2,.8,.2,1)}
@@ -121,9 +126,10 @@ footer a{color:var(--ice)}
  .deg{font-size:72px}
  .quiz{grid-template-columns:1fr 1fr;gap:8px}.quiz button{padding:12px 10px;font-size:13px}.quiz button:last-child{grid-column:1/-1}
  .thermo{gap:16px}.tcol{flex-direction:row;flex-wrap:wrap;justify-content:center}.tval{font-size:32px}.tcol small{width:100%}
- #gSlide{writing-mode:horizontal-tb;direction:ltr;width:100%;height:8px;background:linear-gradient(90deg,#5ac8ff,#2a3350 66%,#ff8a5b)}
+ #gSlide{writing-mode:horizontal-tb;direction:ltr;width:100%;height:10px;margin:14px 0;background:linear-gradient(90deg,#5ac8ff,#2a3350 66%,#ff8a5b)}
+ .tcol{display:block;text-align:center}.tval{margin-bottom:4px}
  .bar{grid-template-columns:1fr auto;gap:4px 10px;font-size:13px}.bar div{grid-column:1/-1;grid-row:2;height:16px}.bar em{grid-row:1;grid-column:2}
- .heat{grid-template-columns:26px repeat(24,1fr);gap:1px;font-size:9px}.heat i{aspect-ratio:.9;border-radius:2px}
+ .heat{grid-template-columns:26px repeat(24,minmax(0,1fr));gap:1px;font-size:9px}.heat i{aspect-ratio:.9;border-radius:2px}
  .card{padding:16px}.card strong{font-size:28px}
  footer{margin-top:60px}
  .tip{font-size:12px;min-width:150px}
@@ -156,6 +162,7 @@ footer a{color:var(--ice)}
  <p class="sub">Den lyse linjen er faktisk forbruk time for time. Den stiplede er anslaget vårt, beregnet fra vanlig ukemønster og justert for temperaturen i varselet. Den blå linjen er temperaturen.</p>
  <div class="panel">
   <div class="tabs" id="tabs"></div>
+  <div class="tabs sm" id="cgTabs"></div>
   <svg id="chart"></svg>
   <div class="legend"><span style="--c:#e8eefc">Målt (Elhub)</span><span style="--c:#ffb36b">Prognose</span><span style="--c:#7fd8ff">Temperatur (MET)</span></div>
  </div>
@@ -197,7 +204,7 @@ footer a{color:var(--ice)}
   <div class="kicker" style="color:var(--dim)">2 · Skru ned temperaturen</div>
   <h3 class="h3">Dra termometeret og se hvem som reagerer.</h3>
   <div class="thermo">
-   <div class="tcol"><div class="tval"><span id="gT">0</span>°C</div><input type="range" id="gSlide" min="-20" max="10" value="0" orient="vertical"><small>avvik fra normalen</small></div>
+   <div class="tcol"><div class="tval"><span id="gT">0</span>°C</div><input type="range" id="gSlide" min="-20" max="10" value="0"><small>avvik fra normalen</small><div class="presets" id="gPre"></div></div>
    <div class="bars" id="bars"></div>
   </div>
   <p class="qa" id="gNote"></p>
@@ -274,7 +281,8 @@ function forecast(area,dT=0){
  return h.filter(p=>p.t>=now).map(p=>{let v=0;const by={};for(const g in GROUPS){const b=EL.prof[area+"|"+g][EL.key(p.t)];const x=b*(1+GROUPS[g][1]*(AREAS[area].norm-(p.T+dT)));by[g]=x;v+=x}return{t:p.t,v,T:p.T+dT,by,w:p.w,s:p.s}});
 }
 const areasOf=()=>sel==="ALL"?Object.keys(AREAS):[sel];
-function actual(){const ar=areasOf();return EL.t.map((t,i)=>({t,v:ar.reduce((s,a)=>s+Object.keys(GROUPS).reduce((q,g)=>q+(EL.series[a+"|"+g]?.[i]||0),0),0)}))}
+let cg="ALL";const grpsOf=()=>cg==="ALL"?Object.keys(GROUPS):[cg];
+function actual(gs=Object.keys(GROUPS)){const ar=areasOf();return EL.t.map((t,i)=>({t,v:ar.reduce((s,a)=>s+gs.reduce((q,g)=>q+(EL.series[a+"|"+g]?.[i]||0),0),0)}))}
 function fcAll(dT=0){const ar=areasOf(),fs=ar.map(a=>forecast(a,dT)),L=Math.min(...fs.map(f=>f.length));return[...Array(L)].map((_,i)=>{const by={};for(const g in GROUPS)by[g]=fs.reduce((s,f)=>s+f[i].by[g],0);return{t:fs[0][i].t,v:fs.reduce((s,f)=>s+f[i].v,0),T:fs.reduce((s,f)=>s+f[i].T,0)/fs.length,by,s:fs[0][i].s,w:fs[0][i].w}})}
 
 /* ---------- map ---------- */
@@ -305,7 +313,7 @@ function tempColor(T){const f=Math.max(0,Math.min(1,(T+12)/22));const a=[90,200,
 /* ---------- chart ---------- */
 function drawChart(){
  const svg=$("#chart"),W=svg.clientWidth,M=W<600,Hh=M?280:380,pl=M?34:50,pr=M?30:50,pt=20,pb=36;svg.setAttribute("viewBox",`0 0 ${W} ${Hh}`);
- const act=actual().slice(-24*7),fc=fcAll(shift);
+ const act=actual(grpsOf()).slice(-24*7),fc=fcAll(shift).map(p=>cg==="ALL"?p:{...p,v:p.by[cg]});svg.style.height=Hh+"px";
  const tmin=act[0].t,tmax=fc.at(-1).t,vals=[...act,...fc].map(p=>p.v);
  const vmax=Math.max(...vals)*1.08,vmin=Math.min(...vals)*.85;
  const Ts=fc.map(p=>p.T),Tmin=Math.floor(Math.min(...Ts)-2),Tmax=Math.ceil(Math.max(...Ts)+2);
@@ -384,7 +392,7 @@ function groups(){
  ].map(([s,b,p])=>`<div class="card"><small>${s}</small><strong>${b}</strong><p>${p}</p></div>`).join("");
 }
 function thermo(){
- const dT=+$("#gSlide").value;$("#gT").textContent=(dT>0?"+":"")+dT;
+ const dT=+$("#gSlide").value;document.querySelectorAll("#gPre button").forEach(b=>b.classList.toggle("on",+b.dataset.v===dT));$("#gT").textContent=(dT>0?"+":"")+dT;
  const b=weekTot(0),x=weekTot(dT),mx=Math.max(...Object.values(weekTot(-20)));
  $("#bars").innerHTML=Object.entries(GROUPS).map(([g,[n,,c]])=>{const p=(x[g]/b[g]-1)*100,lo=Math.min(b[g],x[g]),hi=Math.max(b[g],x[g]);
   return`<div class="bar" style="--c:${c}"><span>${EMO[g]} ${n}</span><div><i style="width:${lo/mx*100}%"></i><b style="left:${lo/mx*100}%;width:${(hi-lo)/mx*100}%;background-color:${dT<0?c+"88":"transparent"}"></b></div><em>${fmt(x[g]/1000,0)} GWh ${dT?`<b style="color:${p>0?"var(--hot)":"#3ef0a0"}">${p>0?"+":""}${fmt(p,0)} %</b>`:""}</em></div>`}).join("");
@@ -428,6 +436,10 @@ function tick(t){cx.clearRect(0,0,cv.width,cv.height);
  $("#tabs").innerHTML=[["ALL","Hele Norge"],...Object.entries(AREAS).map(([a,p])=>[a,a+" "+p.n])].map(([a,n])=>`<button class="tab" data-a="${a}">${n}</button>`).join("");
  $("#tabs").onclick=e=>e.target.dataset.a&&select(e.target.dataset.a);
  $("#slider").oninput=whatif;
+ $("#cgTabs").innerHTML=[["ALL","Alle kunder"],...Object.entries(GROUPS).map(([g,[n]])=>[g,EMO[g]+" "+n])].map(([g,n])=>`<button class="tab${g==="ALL"?" on":""}" data-g="${g}">${n}</button>`).join("");
+ $("#cgTabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;cg=b.dataset.g;$("#cgTabs").querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));drawChart()};
+ $("#gPre").innerHTML=[-20,-10,-5,0,5].map(v=>`<button data-v="${v}">${v>0?"+":""}${v}°</button>`).join("");
+ $("#gPre").onclick=e=>{const b=e.target.closest("button");if(!b)return;$("#gSlide").value=b.dataset.v;thermo()};
  select("ALL");requestAnimationFrame(tick);
  const io=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("in")),{threshold:.12});
  document.querySelectorAll(".reveal").forEach(r=>io.observe(r));
