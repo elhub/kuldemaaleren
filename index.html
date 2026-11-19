@@ -159,12 +159,12 @@ footer a{color:var(--ice)}
 <section class="reveal">
  <div class="kicker">Kurven</div>
  <h2 id="chTitle">Én uke målt, ni dager varslet.</h2>
- <p class="sub">Den lyse linjen er faktisk forbruk time for time. Den stiplede er anslaget vårt, beregnet fra vanlig ukemønster og justert for temperaturen i varselet. Den blå linjen er temperaturen.</p>
+ <p class="sub">Den lyse linjen er faktisk forbruk time for time. Den stiplede er anslaget vårt, beregnet fra vanlig ukemønster og justert for temperaturen i varselet. Den blå linjen er temperaturen, snudd slik at kaldere er høyere opp. Da ser du hvordan forbruket følger kulda.</p>
  <div class="panel">
   <div class="tabs" id="tabs"></div>
   <div class="tabs sm" id="cgTabs"></div>
   <svg id="chart"></svg>
-  <div class="legend"><span style="--c:#e8eefc">Målt (Elhub)</span><span style="--c:#ffb36b">Prognose</span><span style="--c:#7fd8ff">Temperatur (MET)</span></div>
+  <div class="legend"><span style="--c:#e8eefc">Målt (Elhub)</span><span style="--c:#ffb36b">Prognose</span><span style="--c:#7fd8ff">Temperatur (MET, kaldest øverst)</span></div>
  </div>
 </section>
 
@@ -317,7 +317,7 @@ function drawChart(){
  const tmin=act[0].t,tmax=fc.at(-1).t,vals=[...act,...fc].map(p=>p.v);
  const vmax=Math.max(...vals)*1.08,vmin=Math.min(...vals)*.85;
  const Ts=fc.map(p=>p.T),Tmin=Math.floor(Math.min(...Ts)-2),Tmax=Math.ceil(Math.max(...Ts)+2);
- const X=t=>pl+(t-tmin)/(tmax-tmin)*(W-pl-pr),Y=v=>pt+(1-(v-vmin)/(vmax-vmin))*(Hh-pt-pb),YT=T=>pt+(1-(T-Tmin)/(Tmax-Tmin))*(Hh-pt-pb);
+ const X=t=>pl+(t-tmin)/(tmax-tmin)*(W-pl-pr),Y=v=>pt+(1-(v-vmin)/(vmax-vmin))*(Hh-pt-pb),YT=T=>pt+(T-Tmin)/(Tmax-Tmin)*(Hh-pt-pb);
  const line=(a,f,y)=>a.map((p,i)=>(i?"L":"M")+X(p.t).toFixed(1)+","+y(f(p)).toFixed(1)).join("");
  let g=`<defs><linearGradient id="fa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb36b" stop-opacity=".35"/><stop offset="1" stop-color="#ffb36b" stop-opacity="0"/></linearGradient>
  <linearGradient id="aa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8eefc" stop-opacity=".22"/><stop offset="1" stop-color="#e8eefc" stop-opacity="0"/></linearGradient></defs>`;
