@@ -104,7 +104,28 @@ footer{color:var(--dim);font-size:13px;margin-top:90px;border-top:1px solid var(
 footer a{color:var(--ice)}
 .reveal{opacity:0;transform:translateY(30px);transition:1s cubic-bezier(.2,.8,.2,1)}
 .reveal.in{opacity:1;transform:none}
-@media(max-width:860px){.hero,.whatif,footer{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.mapwrap{max-height:none}}
+@media(max-width:860px){.hero,.whatif,footer{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}.mapwrap{max-height:none;max-width:440px}.hero{min-height:0;padding-top:10px}}
+@media(max-width:600px){
+ main{padding:0 16px 60px}
+ header{padding:14px 0;gap:10px}.badges{gap:4px;font-size:10px}.badge{padding:4px 8px}
+ .hero{gap:10px}.lede{font-size:16px;margin:14px 0 20px}
+ .big{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}.big div:last-child{grid-column:1/-1}
+ .big div strong{font-size:32px}.big div small{font-size:10px}
+ .mapwrap{order:-1;max-width:330px;margin:0 auto -10px}
+ section{margin-top:60px}h2{font-size:28px}.h3{font-size:20px}
+ .panel{padding:16px;border-radius:16px;margin-top:18px}
+ .tabs{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:0 16px 4px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab{white-space:nowrap;flex:none}
+ .legend{gap:10px;font-size:11px}
+ .deg{font-size:72px}
+ .quiz{grid-template-columns:1fr 1fr;gap:8px}.quiz button{padding:12px 10px;font-size:13px}.quiz button:last-child{grid-column:1/-1}
+ .thermo{gap:16px}.tcol{flex-direction:row;flex-wrap:wrap;justify-content:center}.tval{font-size:32px}.tcol small{width:100%}
+ #gSlide{writing-mode:horizontal-tb;direction:ltr;width:100%;height:8px;background:linear-gradient(90deg,#5ac8ff,#2a3350 66%,#ff8a5b)}
+ .bar{grid-template-columns:1fr auto;gap:4px 10px;font-size:13px}.bar div{grid-column:1/-1;grid-row:2;height:16px}.bar em{grid-row:1;grid-column:2}
+ .heat{grid-template-columns:26px repeat(24,1fr);gap:1px;font-size:9px}.heat i{aspect-ratio:.9;border-radius:2px}
+ .card{padding:16px}.card strong{font-size:28px}
+ footer{margin-top:60px}
+ .tip{font-size:12px;min-width:150px}
+}
 </style>
 </head>
 <body>
@@ -281,7 +302,7 @@ function tempColor(T){const f=Math.max(0,Math.min(1,(T+12)/22));const a=[90,200,
 
 /* ---------- chart ---------- */
 function drawChart(){
- const svg=$("#chart"),W=svg.clientWidth,Hh=380,pl=50,pr=50,pt=20,pb=36;svg.setAttribute("viewBox",`0 0 ${W} ${Hh}`);
+ const svg=$("#chart"),W=svg.clientWidth,M=W<600,Hh=M?280:380,pl=M?34:50,pr=M?30:50,pt=20,pb=36;svg.setAttribute("viewBox",`0 0 ${W} ${Hh}`);
  const act=actual().slice(-24*7),fc=fcAll(shift);
  const tmin=act[0].t,tmax=fc.at(-1).t,vals=[...act,...fc].map(p=>p.v);
  const vmax=Math.max(...vals)*1.08,vmin=Math.min(...vals)*.85;
@@ -290,7 +311,7 @@ function drawChart(){
  const line=(a,f,y)=>a.map((p,i)=>(i?"L":"M")+X(p.t).toFixed(1)+","+y(f(p)).toFixed(1)).join("");
  let g=`<defs><linearGradient id="fa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb36b" stop-opacity=".35"/><stop offset="1" stop-color="#ffb36b" stop-opacity="0"/></linearGradient>
  <linearGradient id="aa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8eefc" stop-opacity=".22"/><stop offset="1" stop-color="#e8eefc" stop-opacity="0"/></linearGradient></defs>`;
- for(let d=new Date(tmin);+d<=tmax;d.setDate(d.getDate()+1)){d.setHours(0,0,0,0);const x=X(+d);if(x<pl)continue;g+=`<line x1="${x}" x2="${x}" y1="${pt}" y2="${Hh-pb}" stroke="#141b2c"/><text x="${x+4}" y="${Hh-14}">${d.toLocaleDateString("no-NO",{weekday:"short",day:"numeric"})}</text>`}
+ for(let d=new Date(tmin);+d<=tmax;d.setDate(d.getDate()+1)){d.setHours(0,0,0,0);const x=X(+d);if(x<pl)continue;const lab=!M||d.getDate()%3===0;g+=`<line x1="${x}" x2="${x}" y1="${pt}" y2="${Hh-pb}" stroke="#141b2c"/>${lab?`<text x="${x+3}" y="${Hh-14}">${d.toLocaleDateString("no-NO",M?{day:"numeric",month:"short"}:{weekday:"short",day:"numeric"})}</text>`:""}`}
  for(let i=0;i<=4;i++){const v=vmin+(vmax-vmin)*i/4;g+=`<text x="${pl-8}" y="${Y(v)+4}" text-anchor="end">${fmt(v/1000,1)}</text>`;const T=Tmin+(Tmax-Tmin)*i/4;g+=`<text x="${W-pr+8}" y="${YT(T)+4}" fill="#7fd8ff" style="fill:#7fd8ff">${fmt(T,0)}°</text>`}
  g+=`<text x="${pl-8}" y="12" text-anchor="end">GWh/t</text>`;
  const nx=X(Date.now());g+=`<rect x="${X(act.at(-1).t)}" y="${pt}" width="${nx-X(act.at(-1).t)}" height="${Hh-pt-pb}" fill="#ffffff06"/><line x1="${nx}" x2="${nx}" y1="${pt}" y2="${Hh-pb}" stroke="#fff" stroke-opacity=".5" stroke-dasharray="2 4"/><text x="${nx+5}" y="${pt+12}" style="fill:#fff">nå</text>`;
@@ -300,12 +321,12 @@ function drawChart(){
  g+=`<line id="cx" y1="${pt}" y2="${Hh-pb}" stroke="#fff" opacity="0"/><circle id="cd" r="5" fill="#fff" opacity="0"/><rect id="hit" x="${pl}" y="0" width="${W-pl-pr}" height="${Hh}" fill="transparent"/>`;
  svg.innerHTML=g;
  const all=[...act.map(p=>({...p,k:"m"})),...fc.map(p=>({...p,k:"f"}))],tip=$("#tip");
- svg.querySelector("#hit").onmousemove=e=>{const r=svg.getBoundingClientRect(),t=tmin+(e.clientX-r.left-pl)/(W-pl-pr)*(tmax-tmin);let p=all.reduce((a,b)=>Math.abs(b.t-t)<Math.abs(a.t-t)?b:a);
+ svg.querySelector("#hit").style.touchAction="pan-y";svg.querySelector("#hit").onpointermove=svg.querySelector("#hit").onpointerdown=e=>{const r=svg.getBoundingClientRect(),t=tmin+(e.clientX-r.left-pl)/(W-pl-pr)*(tmax-tmin);let p=all.reduce((a,b)=>Math.abs(b.t-t)<Math.abs(a.t-t)?b:a);
   svg.querySelector("#cx").setAttribute("x1",X(p.t));svg.querySelector("#cx").setAttribute("x2",X(p.t));svg.querySelector("#cx").setAttribute("opacity",.3);
   const cd=svg.querySelector("#cd");cd.setAttribute("cx",X(p.t));cd.setAttribute("cy",Y(p.v));cd.setAttribute("opacity",1);
-  tip.style.opacity=1;tip.style.left=Math.min(e.clientX+16,innerWidth-200)+"px";tip.style.top=e.clientY-70+"px";
+  tip.style.opacity=1;tip.style.left=Math.max(8,Math.min(e.clientX+16,innerWidth-200))+"px";tip.style.top=Math.max(8,e.clientY-(e.pointerType==="touch"?120:70))+"px";
   tip.innerHTML=`<div style="color:var(--dim)">${new Date(p.t).toLocaleString("no-NO",{weekday:"long",hour:"2-digit",minute:"2-digit",day:"numeric",month:"short"})}</div><b>${fmt(p.v,0)} MWh</b> <span style="color:${p.k==="m"?"#e8eefc":"#ffb36b"}">${p.k==="m"?"målt":"prognose"}</span>${p.T!=null?`<div style="color:#7fd8ff">${fmt(p.T,1)} °C ${icon(p.s)}</div>`:""}`};
- svg.querySelector("#hit").onmouseleave=()=>{tip.style.opacity=0};
+ svg.querySelector("#hit").onpointerleave=svg.querySelector("#hit").onpointerup=()=>{tip.style.opacity=0};
 }
 const icon=s=>!s?"":s.includes("snow")||s.includes("sleet")?"❄️":s.includes("rain")?"🌧️":s.includes("fog")?"🌫️":s.includes("clearsky")?(s.includes("night")?"🌙":"☀️"):s.includes("partly")||s.includes("fair")?"⛅":"☁️";
 
@@ -373,11 +394,11 @@ function heat(){
  const ar=areasOf(),c=GROUPS[gSel][2],p=Array(168).fill(0);
  for(const a of ar)EL.prof[a+"|"+gSel].forEach((v,i)=>p[i]+=v);
  const mn=Math.min(...p),mx=Math.max(...p),D=["man","tir","ons","tor","fre","lør","søn"];
- let h="<span></span>"+[...Array(24)].map((_,i)=>`<span style="text-align:center">${i%3?"":i}</span>`).join("");
+ let h="<span></span>"+[...Array(24)].map((_,i)=>`<span style="text-align:center">${i%(innerWidth<600?6:3)?"":i}</span>`).join("");
  for(let d=0;d<7;d++){h+=`<span>${D[d]}</span>`;for(let k=0;k<24;k++){const v=p[d*24+k];h+=`<i style="--c:${c};--o:${.08+.92*((v-mn)/(mx-mn||1))}" data-t="${D[d]} kl. ${String(k).padStart(2,"0")}" data-v="${v}"></i>`}}
  const el=$("#heat"),tip=$("#tip");el.innerHTML=h;
- el.onmousemove=e=>{const i=e.target.dataset;if(!i.v){tip.style.opacity=0;return}tip.style.opacity=1;tip.style.left=e.clientX+14+"px";tip.style.top=e.clientY-60+"px";tip.innerHTML=`<div style="color:var(--dim)">${i.t}, snitt siste 4 uker</div><b>${fmt(+i.v,0)} MWh</b>`};
- el.onmouseleave=()=>tip.style.opacity=0;
+ el.onpointermove=el.onpointerdown=e=>{const i=e.target.dataset;if(!i.v){tip.style.opacity=0;return}tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-190)+"px";tip.style.top=e.clientY-(e.pointerType==="touch"?100:60)+"px";tip.innerHTML=`<div style="color:var(--dim)">${i.t}, snitt siste 4 uker</div><b>${fmt(+i.v,0)} MWh</b>`};
+ el.onpointerleave=()=>tip.style.opacity=0;
  const day=d=>p.slice(d*24,d*24+24).reduce((a,b)=>a+b),wd=[0,1,2,3,4].reduce((s,d)=>s+day(d),0)/5,we=(day(5)+day(6))/2,pk=p.indexOf(mx);
  const story={household:"Forbruket stiger om morgenen og er høyest om kvelden, når folk er hjemme, lager mat og vasker klær.",cabin:"Se fredagen: folk skrur på varmen før de reiser til hytta, og forbruket holder seg høyt gjennom helgen.",tertiary:"Kontorer og butikker følger arbeidstiden. Kveldene og helgene er stille.",secondary:"Industrien går døgnet rundt. Ruta er nesten like lys overalt.",primary:"Gårder og fiske bruker strøm jevnt, med en liten topp på dagtid."}[gSel];
  $("#heatNote").innerHTML=`${story} Toppen er <b>${D[Math.floor(pk/24)]} kl. ${pk%24}</b>. I helgen bruker de <b>${we>wd?"+":""}${fmt((we/wd-1)*100,0)} %</b> sammenlignet med en hverdag. Lysere rute = mer strøm.`;
