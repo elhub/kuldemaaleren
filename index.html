@@ -102,8 +102,9 @@ input[type=range]::-moz-range-thumb{width:30px;height:30px;border-radius:50%;bac
 #gSlide{writing-mode:vertical-lr;direction:rtl;width:10px;height:220px;background:linear-gradient(0deg,#5ac8ff,#2a3350 66%,#ff8a5b)}
 .bar{grid-template-columns:150px 1fr 120px}
 .bar div{height:22px;position:relative}
-.bar div i{transition:width .35s}
-.bar div b{position:absolute;top:0;height:100%;background:repeating-linear-gradient(45deg,#fff3 0 4px,transparent 4px 8px);transition:.35s;border-radius:0 9px 9px 0}
+.bar div i{transition:width .35s;border-radius:0}
+.bar div b{position:absolute;top:0;height:100%;background:repeating-linear-gradient(45deg,#fff3 0 4px,transparent 4px 8px);transition:.35s;border-radius:0}
+.bar div b::after{content:"";position:absolute;right:0;top:0;bottom:0;width:2px;background:var(--c)}
 .bar em b{color:var(--hot);font-weight:600}
 .heat{display:grid;width:100%;overflow:hidden;grid-template-columns:34px repeat(24,minmax(0,1fr));gap:2px;margin-top:18px;font-size:10px;color:var(--dim)}
 .heat i{aspect-ratio:1.6;border-radius:3px;background:var(--c);opacity:var(--o);cursor:crosshair;transition:transform .15s}
